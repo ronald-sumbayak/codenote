@@ -27,7 +27,7 @@ class CreateCodesTable extends Migration
             $table->float ('time', 3, 2)->nullable ();
             $table->bigInteger ('memory')->nullable ();
 
-            $table->longText ('code')->nullable ();
+            $table->longText ('source')->nullable ();
             $table->longText ('input')->nullable ();
             $table->longText ('output')->nullable ();
 

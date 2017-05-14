@@ -13,8 +13,11 @@ class Code extends Model
     protected $hidden = ['user', 'password'];
     protected $attributes = [
         'user'     => 'umum',
-        'language' => 'text',
-        'caret'    => 0,
-        'compiled' => false
+        'langName' => 'text',
+        'caret'    => 0
     ];
+
+    public function enc () {
+        return md5 ($this->uri) . $this->password;
+    }
 }
