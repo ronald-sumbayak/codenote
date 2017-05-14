@@ -29,7 +29,7 @@ class CodeController extends Controller
     }
 
     public function open (Request $request, $uri) {
-        $code = Code::firstOrNew (['uri' => $uri]);
+        $code = Code::firstOrCreate (['uri' => $uri]);
 
         if ($code->password && $request->session ()->get (md5 ($code->uri)) != $code->enc ())
             return view ('protected', ['code' => $code]);
@@ -43,7 +43,7 @@ class CodeController extends Controller
         $code = Code::find ($request->uri);
 
         if (!$code)
-            return $this->simpleJson ('code does not exists');
+            return $this->simpleJson ('code does not exist');
 
         if (!$code->password)
             return $this->simpleJson ('this code is not password-protected');
@@ -62,7 +62,10 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::firstOrNew (['uri' =>$request->uri]);
+        $code = Code::find (['uri' =>$request->uri]);
+
+        if (!$code)
+            return $this->simpleJson ('code does not exist');
 
         if ($code->password) {
             if (!$request->oldpassword)
@@ -85,7 +88,10 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::firstOrNew (['uri' => $request->uri]);
+        $code = Code::find ($request->uri);
+
+        if (!$code)
+            return $this->simpleJson ('code does not exist');
 
         $code->password = null;
         $code->save ();
@@ -97,7 +103,10 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::firstOrNew (['uri' => $request->uri]);
+        $code = Code::find ($request->uri);
+
+        if (!$code)
+            return $this->simpleJson ('code does not exist');
 
         if (!$request->newuri)
             return $this->simpleJson ('you must provide new-uri');
@@ -127,31 +136,47 @@ class CodeController extends Controller
         if (!$request->lastupdate)
             return $this->simpleJson ('you must provide lastupdate');
 
-        if (new DateTime ($code->updated_at) <= new DateTime ($request->lastupdate))
+        if (new DateTime ($code->updated_at) == new DateTime ($request->lastupdate))
             return $this->simpleJson ('no update');
 
         return response ()->json (['status' => 'update', 'code' => $code]);
     }
 
-    public function putData (Request $request) {
+    public function postData (Request $request) {
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::firstOrNew (['uri' => $request->uri]);
+        $code = Code::find ($request->uri);
 
         if (!$code)
-            return $this->simpleJson ('code does not exists');
+            return $this->simpleJson ('code does not exist');
 
-        $code->caret = $request->caret;
-        $code->langId = $request->langId;
-        $code->langName = $request->langName;
-        $code->langVersion = $request->langVersion;
-        $code->time = $request->time;
-        $code->result = $request->result;
-        $code->memory = $request->memory;
         $code->source = $request->source;
         $code->input = $request->input;
-        $code->output = $request->output;
+        $code->caret = $request->caret;
+        $code->save ();
+        return $this->simpleJson ('success');
+    }
+
+    public function postResult (Request $request) {
+        if (!$request->uri)
+            return $this->simpleJson ('you must provide uri');
+
+        $code = Code::find ($request->uri);
+
+        if (!$code)
+            return $this->simpleJson ('code does not exist');
+
+        if ($request->caret) $code->caret = $request->caret;
+        if ($request->langId) $code->langId = $request->langId;
+        if ($request->langName) $code->langName = $request->langName;
+        if ($request->langVersion) $code->langVersion = $request->langVersion;
+        if ($request->time) $code->time = $request->time;
+        if ($request->result) $code->result = $request->result;
+        if ($request->memory) $code->memory = $request->memory;
+        if ($request->source) $code->source = $request->source;
+        if ($request->input) $code->input = $request->input;
+        if ($request->output) $code->output = $request->output;
         $code->save ();
         return $this->simpleJson ('success');
     }

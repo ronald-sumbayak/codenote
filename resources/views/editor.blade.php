@@ -69,17 +69,17 @@
 
         <div class="col-sm-12">
             <div class="container">
-                <code><textarea class="form-control code-form" rows="20" id="sourceCode">{{ $code->code }}</textarea></code>
-                <code><textarea class="form-control code-form" rows="10" style="margin-top: 0;" id="input">{{ $code->input }}</textarea></code>
+                <code><textarea class="form-control code-form" rows="20" id="sourceCode">{{ $code->source }}</textarea></code>
+                <code><textarea class="form-control code-form" rows="10" style="margin-top: 0;" id="input"></textarea></code>
                 <div class="alert alert-success compilation-alert" role="alert" id="success-alert" hidden></div>
                 <div class="alert alert-danger compilation-alert" role="alert" id="error-alert" hidden></div>
                 <div class="alert alert-info compilation-alert" role="alert" id="stderr-alert" hidden></div>
                 <code><div class="alert alert-warning compilation-alert" role="alert" id="cmpinfo-alert" hidden></div></code>
-                <code><div class="form-control" style="margin-top: 0;" id="output">{{ $code->output }}</div></code>
+                <code><div class="form-control" style="margin-top: 0;" id="output"></div></code>
 
                 <div class="form-group row col-xs-2">
                     <select class="form-control code-form" id="lang">
-                        <option selected>Text</option>
+                        <option value="0" selected>Text</option>
                     </select>
                 </div>
 
@@ -91,16 +91,26 @@
 
     </section>
 
-    <!-- script tags
-	============================================================= -->
+    <!-- script tags -->
     <script src="js/jquery-2.1.1.js"></script>
     <script src="js/smoothscroll.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/custom.js"></script>
-    <script src="js/sync.js"></script>  <!-- koneksi ke bek en -->
-    <!-- static variable --> <script>
+
+    <!-- koneksi ke bek en -->
+    <script src="js/code/sync.js"></script>
+    <script src="js/code/compile.js"></script>
+    <script src="js/code/editor.js"></script>
+    <script src="js/code/password.js"></script>
+    <script src="js/code/sphere.js"></script>
+    <script src="js/code/uri.js"></script>
+
+    <!-- static variable -->
+    <script>
     uri = '{{ $code->uri }}';
     caret = {{ $code->caret }};
+    lastupdate = '{{ $code->updated_at }}';
+    timer = setTimeout (function () {}, 0);
     </script>
 </body>
 

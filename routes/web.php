@@ -22,8 +22,9 @@ Route::post ('/api/changeuri/',     'CodeController@changeUri');
 Route::post ('/api/submission/', 'SubmissionController@submit');
 Route::post ('/api/convert/',    'SubmissionController@convert');
 
-Route::get  ('/api/getdata/', 'CodeController@getData');
-Route::post ('/api/putdata/', 'CodeController@putData');
+Route::post ('/api/postresult/', 'CodeController@postResult');
+Route::post ('/api/postdata/',   'CodeController@postData');
+Route::get  ('/api/getdata/',    'CodeController@getData');
 
 Route::get  ('/share/{uri}', 'CodeController@share');
 Route::get  ('/{uri}',       'CodeController@open');
