@@ -11,6 +11,19 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get  ('/', 'CodeController@index');
+
+Route::get  ('/api/token/',         'CodeController@token');
+Route::post ('/api/checkpassword/', 'CodeController@checkPassword');
+Route::post ('/api/setpassword/',   'CodeController@setPassword');
+Route::post ('/api/clearpassword/', 'CodeController@clearPassword');
+Route::post ('/api/changeuri/',     'CodeController@changeUri');
+
+Route::post ('/api/submission/', 'SubmissionController@submit');
+Route::post ('/api/convert/',    'SubmissionController@convert');
+
+Route::get  ('/api/getdata/', 'CodeController@getData');
+Route::post ('/api/putdata/', 'CodeController@putData');
+
+Route::get  ('/share/{uri}', 'CodeController@share');
+Route::get  ('/{uri}',       'CodeController@open');
