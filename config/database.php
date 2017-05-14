@@ -56,11 +56,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', 'tantor.db.elephantsql.com'),
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'codenote'),
-            'username' => env('DB_USERNAME', 'postgres'),
-            'password' => env('DB_PASSWORD', '[\]'),
+            'database' => env('DB_DATABASE', 'gpgkonvf'),
+            'username' => env('DB_USERNAME', 'gpgkonvf'),
+            'password' => env('DB_PASSWORD', 'Cu6EOp3G97daawOFE_0yoEEEK5KbUaYG'),
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
