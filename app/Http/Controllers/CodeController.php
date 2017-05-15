@@ -62,10 +62,7 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::find (['uri' =>$request->uri]);
-
-        if (!$code)
-            return $this->simpleJson ('code does not exist');
+        $code = Code::firstOrCreate (['uri' => $request->uri]);
 
         if ($code->password) {
             if (!$request->oldpassword)
@@ -88,10 +85,7 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::find ($request->uri);
-
-        if (!$code)
-            return $this->simpleJson ('code does not exist');
+        $code = Code::firstOrCreate (['uri' => $request->uri]);
 
         $code->password = null;
         $code->save ();
@@ -103,10 +97,7 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::find ($request->uri);
-
-        if (!$code)
-            return $this->simpleJson ('code does not exist');
+        $code = Code::firstOrCreate (['uri' => $request->uri]);
 
         if (!$request->newuri)
             return $this->simpleJson ('you must provide new-uri');
@@ -128,10 +119,7 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::find ($request->uri);
-
-        if (!$code)
-            return $this->simpleJson ('code does not exist');
+        $code = Code::firstOrCreate (['uri' => $request->uri]);
 
         if (!$request->lastupdate)
             return $this->simpleJson ('you must provide lastupdate');
@@ -146,10 +134,7 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::find ($request->uri);
-
-        if (!$code)
-            return $this->simpleJson ('code does not exist');
+        $code = Code::firstOrCreate (['uri' => $request->uri]);
 
         $code->source = $request->source;
         $code->input = $request->input;
@@ -162,10 +147,7 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::find ($request->uri);
-
-        if (!$code)
-            return $this->simpleJson ('code does not exist');
+        $code = Code::firstOrCreate (['uri' => $request->uri]);
 
         if ($request->caret) $code->caret = $request->caret;
         if ($request->langId) $code->langId = $request->langId;
@@ -174,9 +156,9 @@ class CodeController extends Controller
         if ($request->time) $code->time = $request->time;
         if ($request->result) $code->result = $request->result;
         if ($request->memory) $code->memory = $request->memory;
-        if ($request->source) $code->source = $request->source;
-        if ($request->input) $code->input = $request->input;
-        if ($request->output) $code->output = $request->output;
+        $code->source = $request->source;
+        $code->input = $request->input;
+        $code->output = $request->output;
         $code->save ();
         return $this->simpleJson ('success');
     }
