@@ -7,10 +7,10 @@ function check_password () {
     $('#checkpassword-alert').hide ();
     $.ajax ({
         url: '/api/checkpassword/',
-        type: 'POST',
+        type: 'GET',
         data: {
-            'uri': uri,
-            'password': $('#password').val ()
+            uri: uri,
+            password: $('#password').val ()
         },
         success: function (data) {
             if (data['status'] == 'success')
@@ -58,7 +58,7 @@ function change_password () {
 function clear_password () {
     $.ajax ({
         url: '/api/clearpassword/',
-        type: 'POST',
+        type: 'GET',
         data: { 'uri': uri },
         success: function (data) {
             if (data['status'] == 'success')
