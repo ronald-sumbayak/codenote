@@ -28,3 +28,4 @@ Route::get  ('/api/getdata/',    'CodeController@getData');
 
 Route::get  ('/share/{uri}', 'CodeController@share');
 Route::get  ('/{uri}',       'CodeController@open');
+Route::post ('/{uri}',       'CodeController@open');
