@@ -32,7 +32,7 @@ function change_password () {
     console.log ('setpassword');
     $.ajax ({
         url: '/api/setpassword/',
-        type: 'POST',
+        type: 'GET',
         data: {
             'uri': uri,
             'oldpassword': $('#old-password').val (),
