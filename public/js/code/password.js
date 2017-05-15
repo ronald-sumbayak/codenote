@@ -7,10 +7,10 @@ function check_password () {
     $('#checkpassword-alert').hide ();
     $.ajax ({
         url: '/api/checkpassword/',
-        type: 'GET',
+        type: 'POST',
         data: {
-            uri: uri,
-            password: $('#password').val ()
+            'uri': uri,
+            'password': $('#password').val ()
         },
         success: function (data) {
             if (data['status'] == 'success')
@@ -29,17 +29,15 @@ function check_password () {
 
 function change_password () {
     $('#setpassword-alert').hide ();
-    console.log ('setpassword');
     $.ajax ({
         url: '/api/setpassword/',
-        type: 'GET',
+        type: 'POST',
         data: {
             'uri': uri,
             'oldpassword': $('#old-password').val (),
             'newpassword': $('#new-password').val ()
         },
         success: function (data) {
-            console.log (data);
             if (data['status'] == 'success')
                 // if ($('#old-password').val () != $('#new-password').val ())
                 window.location.replace ("/" + uri);
@@ -58,7 +56,7 @@ function change_password () {
 function clear_password () {
     $.ajax ({
         url: '/api/clearpassword/',
-        type: 'GET',
+        type: 'POST',
         data: { 'uri': uri },
         success: function (data) {
             if (data['status'] == 'success')

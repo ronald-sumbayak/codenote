@@ -28,14 +28,3 @@ Route::get  ('/api/getdata/',    'CodeController@getData');
 
 Route::get  ('/share/{uri}', 'CodeController@share');
 Route::get  ('/{uri}',       'CodeController@open');
-
-Route::get ('/api/checkpassword/', 'CodeController@checkPassword');
-Route::get ('/api/setpassword/',   'CodeController@setPassword');
-Route::get ('/api/clearpassword/', 'CodeController@clearPassword');
-Route::get ('/api/changeuri/',     'CodeController@changeUri');
-
-Route::get ('/api/submission/', 'SubmissionController@submit');
-Route::get ('/api/convert/',    'SubmissionController@convert');
-
-Route::get ('/api/postresult/', 'CodeController@postResult');
-Route::get ('/api/postdata/',   'CodeController@postData');
