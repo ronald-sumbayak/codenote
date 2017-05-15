@@ -53,12 +53,12 @@
 
         <div id="password-form" hidden>
             @if ($code->password)
-                <input type="password" name="oldpassword" id="old-password" required>
-                <input type="password" name="newpassword" id="new-password" required>
+                <input type="text" name="oldpassword" id="old-password" required>
+                <input type="text" name="newpassword" id="new-password" required>
                 <button onclick="change_password ()">Set Password</button>
                 <button onclick="clear_password ()">Clear Password</button>
             @else
-                <input type="password" name="newpassword" id="new-password" required>
+                <input type="text" name="newpassword" id="new-password" required>
                 <button onclick="change_password ()">Set Password</button>
             @endif
             <button>Cancel</button>
