@@ -9,7 +9,7 @@ function changeuri () {
 
     $.ajax ({
         url: '/api/changeuri/',
-        type: 'POST',
+        type: 'GET',
         data: {
             'uri': uri,
             'newuri': $('#new-uri').val ()

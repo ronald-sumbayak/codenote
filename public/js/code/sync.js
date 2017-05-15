@@ -12,7 +12,7 @@ $('#input').keydown (function () {
 });
 
 function postData () {
-    $.post ('/api/postdata/', {
+    $.get ('/api/postdata/', {
         'uri': uri,
         'caret': $('#sourceCode').prop ('selectionStart'),
         'source': $('#sourceCode').val (),

@@ -12,9 +12,9 @@ function hideLoading () {
 }
 
 function postResult (data) {
-    $.post ('/api/submission/', { 'id': data['id'] });
+    $.get ('/api/submission/', { 'id': data['id'] });
 
-    $.post ('/api/postresult/', {
+    $.get ('/api/postresult/', {
         'uri': uri,
         'caret': 0,
         'langId': data['langId'],
