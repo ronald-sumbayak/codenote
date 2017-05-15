@@ -15,6 +15,7 @@ Route::get  ('/', 'CodeController@index');
 
 Route::get  ('/api/token/',         'CodeController@token');
 Route::post ('/api/checkpassword/', 'CodeController@checkPassword');
+Route::get  ('/api/setpassword/',   'CodeController@setPassword');
 Route::post ('/api/setpassword/',   'CodeController@setPassword');
 Route::post ('/api/clearpassword/', 'CodeController@clearPassword');
 Route::post ('/api/changeuri/',     'CodeController@changeUri');
