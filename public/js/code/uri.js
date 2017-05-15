@@ -8,7 +8,7 @@ function changeuri () {
     if ($('#new-uri').val () == uri) return;
 
     $.ajax ({
-        url: '/api/changeuri/',
+        url: '/api/changeuri',
         type: 'POST',
         data: {
             'uri': uri,

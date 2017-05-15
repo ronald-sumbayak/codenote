@@ -12,9 +12,9 @@ function hideLoading () {
 }
 
 function postResult (data) {
-    $.post ('/api/submission/', { 'id': data['id'] });
+    $.post ('/api/submission', { 'id': data['id'] });
 
-    $.post ('/api/postresult/', {
+    $.post ('/api/postresult', {
         'uri': uri,
         'caret': 0,
         'langId': data['langId'],
@@ -75,7 +75,7 @@ function retrieveResult (id) {
         success: function (data) {
             data = [data.slice (0, 1), "\"id\":", id, ",", data.slice (1)].join ('');
 
-            $.post ('/api/convert/', { 'text': data }, function (convert) {
+            $.post ('/api/convert', { 'text': data }, function (convert) {
                 if (convert['error'] != "OK") {
                     $('#error-alert').html (convert['error']);
                     $('#error-alert').show ();

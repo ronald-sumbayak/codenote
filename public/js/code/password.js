@@ -6,7 +6,7 @@ $('#open-password').click (function () {
 function check_password () {
     $('#checkpassword-alert').hide ();
     $.ajax ({
-        url: '/api/checkpassword/',
+        url: '/api/checkpassword',
         type: 'POST',
         data: {
             'uri': uri,
@@ -30,7 +30,7 @@ function check_password () {
 function change_password () {
     $('#setpassword-alert').hide ();
     $.ajax ({
-        url: '/api/setpassword/',
+        url: '/api/setpassword',
         type: 'POST',
         data: {
             'uri': uri,
@@ -55,7 +55,7 @@ function change_password () {
 
 function clear_password () {
     $.ajax ({
-        url: '/api/clearpassword/',
+        url: '/api/clearpassword',
         type: 'POST',
         data: { 'uri': uri },
         success: function (data) {
