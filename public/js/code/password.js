@@ -38,6 +38,7 @@ function change_password () {
             'newpassword': $('#new-password').val ()
         },
         success: function (data) {
+            console.log (data);
             if (data['status'] == 'success')
                 // if ($('#old-password').val () != $('#new-password').val ())
                 window.location.replace ("/" + uri);
