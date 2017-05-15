@@ -16,7 +16,7 @@
 
     <script src="js/jquery-2.1.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/sync.js"></script>
+    <script src="js/code/password.js"></script>
     <!-- static variable --> <script>
     uri = '{{ $code->uri }}';
     </script>
