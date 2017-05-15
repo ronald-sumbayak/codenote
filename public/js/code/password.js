@@ -29,6 +29,7 @@ function check_password () {
 
 function change_password () {
     $('#setpassword-alert').hide ();
+    console.log ('setpassword');
     $.ajax ({
         url: '/api/setpassword/',
         type: 'POST',
