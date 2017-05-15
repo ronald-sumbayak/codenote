@@ -83,7 +83,7 @@
                     </select>
                 </div>
 
-                <button class="code-form"vonclick="run ()" id="run">Run</button>
+                <button class="code-form" onclick="run ()" id="run">Run</button>
             </div>
         </div>
 

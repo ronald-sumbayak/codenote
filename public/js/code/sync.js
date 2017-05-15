@@ -27,7 +27,6 @@ function update () {
         'uri': uri,
         'lastupdate': lastupdate
     }, function (data) {
-        console.log (data);
         if (data['status'] == 'update') {
             $('#sourceCode').val (data['code']['source']);
             $('#sourceCode').prop ('selectionStart', data['code']['caret']);
