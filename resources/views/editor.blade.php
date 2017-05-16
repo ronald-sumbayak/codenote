@@ -32,8 +32,8 @@
                             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                 <ul class="nav navbar-nav navbar-right">
                                     <li><a href="/">New Note</a></li>
-                                    <li><button id="open-password">Password</button></li>
-                                    <li><button id="open-changeuri">change URL</button></li>
+                                    <li><a type="button" id="open-password" style="cursor:pointer">Password</a></li>
+                                    <li><a type="button" id="open-changeuri" style="cursor:pointer" data-toggle="modal" data-target=".bd-example-modal-lg">change URL</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -43,13 +43,31 @@
         </div>
     </header>
 
-    <section class="banner text-center" id="sec1">
-        <div id="changeuri-form" hidden>
+    <section class="banner text-center" id="sec1" style="margin-top: 1%;">
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" >
+            <div class="modal-content">
+                 <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Change URL</h5>
+                  </div>
+                <div class="modal-body">
+              <div id="changeuri-form">
+                    <input type="text" name="newuri" id="new-uri" value="{{ $code->uri }}" required>
+                        <button onclick="changeuri ()" class="code-form btn btn-success">Change</button>
+                        <button class="code-form btn btn-success" data-dismiss="modal" id="butcan">Cancel</button>
+                        <div class="alert alert-danger" role="alert" id="changeuri-alert" hidden></div>
+                </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div id="changeuri-form" hidden>
             <input type="text" name="newuri" id="new-uri" value="{{ $code->uri }}" required>
             <button onclick="changeuri ()">Change</button>
             <button>Cancel</button>
             <div class="alert alert-danger" role="alert" id="changeuri-alert" hidden></div>
-        </div>
+        </div> -->
 
         <div id="password-form" hidden>
             @if ($code->password)
@@ -69,22 +87,32 @@
 
         <div class="col-sm-12">
             <div class="container">
-                <code><textarea class="form-control code-form" rows="20" id="sourceCode">{{ $code->source }}</textarea></code>
-                <code><textarea class="form-control code-form" rows="10" style="margin-top: 0;" id="input"></textarea></code>
+                <textarea class="form-control code-form" rows="20" id="sourceCode">{{ $code->source }}</textarea>
+                <textarea class="form-control code-form open-input" rows="10" style="margin-top: 5%; display: none;" id="input" ></textarea>
                 <div class="alert alert-success compilation-alert" role="alert" id="success-alert" hidden></div>
                 <div class="alert alert-danger compilation-alert" role="alert" id="error-alert" hidden></div>
                 <div class="alert alert-info compilation-alert" role="alert" id="stderr-alert" hidden></div>
-                <code><div class="alert alert-warning compilation-alert" role="alert" id="cmpinfo-alert" hidden></div></code>
-                <code><div class="form-control" style="margin-top: 0;" id="output"></div></code>
+                <div class="alert alert-warning compilation-alert" role="alert" id="cmpinfo-alert" hidden></div>
+                <div class="form-control" id="output"></div>
 
-                <div class="form-group row col-xs-2">
-                    <select class="form-control code-form" id="lang">
-                        <option value="0" selected>Text</option>
-                    </select>
+                <div>
+                    <div class="form-group row col-xs-2">
+                        <select class="form-control code-form" id="lang">
+                            <option value="0" selected>Text</option>
+                        </select>
+                    </div>
+
+                    <button class="code-form btn btn-success" id="open-test" style="float: left;">Input</button>
+                    <button class="code-form btn btn-success" onclick="run ()" id="run" style="float: right;">Run</button>
                 </div>
-
-                <button class="code-form" onclick="run ()" id="run">Run</button>
             </div>
+        </div>
+
+        <div class="col-sm-12 footer">
+            
+            <p> Presents By KERJA.IN </p>
+            <p> CODENOTE is powered By BadutEngine </p>
+
         </div>
 
 
@@ -100,10 +128,12 @@
     <!-- koneksi ke bek en -->
     <script src="js/code/sync.js"></script>
     <script src="js/code/compile.js"></script>
+    <script src="js/code/input.js"></script>
     <script src="js/code/editor.js"></script>
     <script src="js/code/password.js"></script>
     <script src="js/code/sphere.js"></script>
     <script src="js/code/uri.js"></script>
+    
 
     <!-- static variable -->
     <script>
