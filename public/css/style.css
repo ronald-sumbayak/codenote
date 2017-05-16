@@ -2,7 +2,8 @@ body{
 	margin: 0;
 	padding: 0;
 	font-family: 'Open Sans', sans-serif;
-    background-color:#edeeef;
+    /*background-color:#edeeef;*/
+    background-color: red;
 }
 a:hover, a:visited, a{
 	text-decoration: none;
