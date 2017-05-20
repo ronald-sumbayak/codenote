@@ -34,6 +34,7 @@
                                     <li><a href="/">New Note</a></li>
                                     <li><a type="button" id="open-password" style="cursor:pointer" data-toggle="modal" data-target=".bd-example-modal-lg-new">Password</a></li>
                                     <li><a type="button" id="open-changeuri" style="cursor:pointer" data-toggle="modal" data-target=".bd-example-modal-lg">change URL</a></li>
+                                    <li><a href="#">Log In</a></li>
                                 </ul>
                             </div>
                         </div>
