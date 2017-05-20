@@ -32,7 +32,7 @@
                             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                 <ul class="nav navbar-nav navbar-right">
                                     <li><a href="/">New Note</a></li>
-                                    <li><a type="button" id="open-password" style="cursor:pointer">Password</a></li>
+                                    <li><a type="button" id="open-password" style="cursor:pointer" data-toggle="modal" data-target=".bd-example-modal-lg-new">Password</a></li>
                                     <li><a type="button" id="open-changeuri" style="cursor:pointer" data-toggle="modal" data-target=".bd-example-modal-lg">change URL</a></li>
                                 </ul>
                             </div>
@@ -51,17 +51,43 @@
                     <h5 class="modal-title" id="exampleModalLabel">Change URL</h5>
                   </div>
                 <div class="modal-body">
-              <div id="changeuri-form">
-                    <input type="text" name="newuri" id="new-uri" value="{{ $code->uri }}" required>
-                        <button onclick="changeuri ()" class="code-form btn btn-success">Change</button>
-                        <button class="code-form btn btn-success" data-dismiss="modal" id="butcan">Cancel</button>
-                        <div class="alert alert-danger" role="alert" id="changeuri-alert" hidden></div>
-                </div>
+                     <div id="changeuri-form">
+                        <input type="text" name="newuri" id="new-uri" value="{{ $code->uri }}" required>
+                            <button onclick="changeuri ()" class="code-form btn btn-success">Change</button>
+                            <button class="code-form btn btn-success" data-dismiss="modal" class="butcan">Cancel</button>
+                            <div class="alert alert-danger" role="alert" id="changeuri-alert" hidden style="margin-top: 10px;"></div>
+                    </div>
                 </div>
             </div>
           </div>
         </div>
 
+            <div class="modal fade bd-example-modal-lg-new" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                     <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+                     </div>
+
+                      <div class="modal-body">
+                         <div id="password-form">
+                            @if ($code->password)
+                                <input type="password" name="oldpassword" id="old-password" required>
+                                <input type="password" name="newpassword" id="new-password" required>
+                                <button  class="code-form btn btn-success" onclick="change_password ()">Set Password</button>
+                                <button  class="code-form btn btn-success" onclick="clear_password ()">Clear Password</button>
+                            @else
+                                <input type="password" name="newpassword" id="new-password" required>
+                                <button  class="code-form btn btn-success" onclick="change_password ()">Set Password</button>
+                            @endif
+                            <button  class="code-form btn btn-success">Cancel</button>
+                            <div class="alert alert-danger" role="alert" id="setpassword-alert" hidden></div>
+                        </div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
         <!-- <div id="changeuri-form" hidden>
             <input type="text" name="newuri" id="new-uri" value="{{ $code->uri }}" required>
             <button onclick="changeuri ()">Change</button>
@@ -69,7 +95,7 @@
             <div class="alert alert-danger" role="alert" id="changeuri-alert" hidden></div>
         </div> -->
 
-        <div id="password-form" hidden>
+       <!--  <div id="password-form" hidden>
             @if ($code->password)
                 <input type="password" name="oldpassword" id="old-password" required>
                 <input type="password" name="newpassword" id="new-password" required>
@@ -81,7 +107,7 @@
             @endif
             <button>Cancel</button>
             <div class="alert alert-danger" role="alert" id="setpassword-alert" hidden></div>
-        </div>
+        </div> -->
 
 
 
@@ -114,8 +140,6 @@
             <p> CODENOTE is powered By BadutEngine </p>
 
         </div>
-
-
 
     </section>
 

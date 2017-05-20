@@ -2,9 +2,8 @@ body{
 	margin: 0;
 	padding: 0;
 	font-family: 'Open Sans', sans-serif;
-    /*background-color:#edeeef;*/
-    background-color: red;
-}
+    background-color:#edeeef;
+ }
 a:hover, a:visited, a{
 	text-decoration: none;
 }
@@ -124,9 +123,12 @@ responsive area
 /* lg */ 
 @media (min-width: 1200px) {
 	#changeuri-form {
-		height: 50px;
+		height: 90px;
 	}
 	
+	#password-form {
+		height: 90px;
+	}
 }
 
 /* md */
@@ -134,6 +136,9 @@ responsive area
 	#changeuri-form {
 			height: 50px;
 		}
+		#password-form {
+		height: 50px;
+	}
 }
 
 /* sm */
@@ -170,6 +175,9 @@ responsive area
 	}
 
 	#changeuri-form {
+		height: 100px;
+	}
+	#password-form {
 		height: 100px;
 	}
 }
@@ -217,7 +225,7 @@ responsive area
 		#changeuri-form {
 		height: 100px;
 	}
-	#butcan {
+	.butcan {
 		margin-top: 20px;
 	}
 }
