@@ -119,7 +119,8 @@
                 <div class="alert alert-danger compilation-alert" role="alert" id="error-alert" hidden></div>
                 <div class="alert alert-info compilation-alert" role="alert" id="stderr-alert" hidden></div>
                 <div class="alert alert-warning compilation-alert" role="alert" id="cmpinfo-alert" hidden></div>
-                <textarea class="form-control" id="output" style="margin-top: 0px;"></textarea>
+                
+                <div style="height: auto; resize: horizontal; display: none;"></div><div class="form-control" id="output" style="resize: vertical; text-align: left; height: 100%"></div>
 
                 <div>
                     <div class="form-group row col-xs-2">
