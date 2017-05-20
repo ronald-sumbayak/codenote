@@ -74,13 +74,13 @@
                             @if ($code->password)
                                 <input type="password" name="oldpassword" id="old-password" required>
                                 <input type="password" name="newpassword" id="new-password" required>
-                                <button  class="code-form btn btn-success" onclick="change_password ()">Set Password</button>
+                                <button  id="setButton" class="code-form btn btn-success" onclick="change_password ()">Set Password</button>
                                 <button  class="code-form btn btn-success" onclick="clear_password ()">Clear Password</button>
                             @else
                                 <input type="password" name="newpassword" id="new-password" required>
                                 <button  class="code-form btn btn-success" onclick="change_password ()">Set Password</button>
                             @endif
-                            <button  class="code-form btn btn-success">Cancel</button>
+                            <button  class="code-form btn btn-success" data-dismiss="modal" class="butcan" id="cancelButton">Cancel</button>
                             <div class="alert alert-danger" role="alert" id="setpassword-alert" hidden></div>
                         </div>
                     </div>
@@ -113,13 +113,13 @@
 
         <div class="col-sm-12">
             <div class="container">
-                <textarea class="form-control code-form" rows="20" id="sourceCode">{{ $code->source }}</textarea>
-                <textarea class="form-control code-form open-input" rows="10" style="margin-top: 5%; display: none;" id="input" ></textarea>
+                <textarea class="form-control code-form" rows="19" id="sourceCode">{{ $code->source }}</textarea>
+                <textarea class="form-control code-form open-input" rows="10" style="margin-top: 2%; display: none;" id="input" ></textarea>
                 <div class="alert alert-success compilation-alert" role="alert" id="success-alert" hidden></div>
                 <div class="alert alert-danger compilation-alert" role="alert" id="error-alert" hidden></div>
                 <div class="alert alert-info compilation-alert" role="alert" id="stderr-alert" hidden></div>
                 <div class="alert alert-warning compilation-alert" role="alert" id="cmpinfo-alert" hidden></div>
-                <div class="form-control" id="output"></div>
+                <textarea class="form-control" id="output" style="margin-top: 0px;"></textarea>
 
                 <div>
                     <div class="form-group row col-xs-2">
