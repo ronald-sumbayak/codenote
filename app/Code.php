@@ -13,8 +13,7 @@ class Code extends Model
     protected $hidden = ['user', 'password'];
     protected $attributes = [
         'user'     => 0,
-        'langName' => 'text',
-        'caret'    => 0
+        'langName' => 'text'
     ];
 
     public function enc () {
