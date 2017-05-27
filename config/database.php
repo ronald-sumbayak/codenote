@@ -20,7 +20,7 @@ return [
     |
     */
 
-    'default' => env ('DB_CONNECTION', 'herokupostgres'),
+    'default' => env ('DB_CONNECTION', 'heroku'),
 
     /*
     |--------------------------------------------------------------------------
@@ -87,7 +87,7 @@ return [
             'sslmode'  => 'prefer',
         ],
 
-        'pgsql' => [
+        'heroku' => [
             'driver'   => 'pgsql',
             'host'     => $host,
             'port'     => env ('DB_PORT',     '5432'),
