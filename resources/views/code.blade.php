@@ -10,7 +10,12 @@
 @endsection
 
 @section ('content')
-    <pre><code class="java">{{ $code->source }}</code></pre>
+
+
+    <pre style="margin-top: 5%;"><code class="java" style="height:300px; ">{{ $code->source }}</code></pre>
+
+
+       @include ('footer')
 @endsection
 
 @section ('scripts')
