@@ -5,13 +5,11 @@
             <div class="col-md-12">
                 <form>
                     <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon">codenotes.me/</span>
-                        <input type="text" name="newuri" class="form-control" id="new-uri" placeholder="url" value="{{ $code->uri }}" required>
-                    </div>
-
-
-                        <button type="submit" id="changeuri" class="btn btn-success btn-block" disabled>Change</button>
+                        <div class="input-group">
+                            <span class="input-group-addon">codenotes.me/</span>
+                            <input type="text" name="newuri" class="form-control" id="new-uri" placeholder="url" value="{{ $code->uri }}" required>
+                        </div>
+                        <button type="submit" id="changeuri" class="btn btn-success btn-block" disabled style="margin-top: 10px;">Change</button>
                     </div>
 
                 </form>

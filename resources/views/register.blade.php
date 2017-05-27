@@ -20,39 +20,39 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-6 col-md-offset-3">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Register</div>
-                    <div class="panel-body">
-                        <form class="form-horizontal">
+                    <div class="panel-heading text-center">Register</div>
+                    <div class="panel-body" >
+                        <form class="form-horizontal"  >
 
-                            <div class="form-group">
-                                <div class="col-md-6">
+                            <div class="form-group text-center">
+                                <div class="col-md-6 col-md-offset-3">
                                     <input id="name" type="text" class="form-control" name="name" value="" required autofocus placeholder="name">
 
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-md-offset-3">
                                     <input id="email" type="email" class="form-control" name="email" value="" required placeholder="email">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-md-offset-3">
                                     <input id="password" type="password" class="form-control" name="password" required placeholder="password">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-md-offset-3">
                                     <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required placeholder="confirm password">
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <div class="col-md-6 col-md-offset-4">
+                            <div class="form-group text-center">
+                                <div class="col-md-6 col-md-offset-3">
                                     <button id="register" type="submit" class="btn btn-primary">
                                         Register
                                     </button>

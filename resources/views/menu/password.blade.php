@@ -22,7 +22,7 @@
                         </div>
 
                         <div class="form-group col-sm-6">
-                            <button id="clear-password" class="btn btn-block btn-danger">Remove Password</button>
+                            <button id="clear-password" class="btn btn-block btn-danger">Remove</button>
                         </div>
                     </div>
 

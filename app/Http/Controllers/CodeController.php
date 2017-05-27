@@ -98,7 +98,7 @@ class CodeController extends Controller
         $code = Code::find ($request->uri);
         $code->password = null;
         $code->save ();
-        return $this->simpleJson ('success');
+        return response ()-> back ();
     }
 
 

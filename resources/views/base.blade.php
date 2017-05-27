@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style2.css">
 
     @yield ('styles')
 
@@ -22,8 +23,6 @@
     <section class="banner text-center">
 
         @yield ('content')
-        @include ('footer')
-
     </section>
 
     {{--@include ('footer')--}}

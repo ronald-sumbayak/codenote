@@ -55,17 +55,17 @@
 </head>
 
 <body>
-    <div class="testbox">
-        <h3>Password</h3>
-        <div style="margin-top: 8%;">password for <strong>{{ $code->uri }}</strong></div>
+    <div class="testbox text-center">
+        <h3 style="margin-top: 2%">Password</h3>
+        <div style="margin-top: 4%;">password for <strong>{{ $code->uri }}</strong></div>
 
         <form>
             <input type="text" name="username" value="{{ $code->uri }}" hidden> <!-- ojok dihapus :v -->
-            <input type="password" name="password" id="password" required style="margin-top: 3%;">
+            <input type="password" name="password" id="password" required style="margin-top: 4%; border-radius: 8px">
             <button id="check-password" type="submit" class="btn btn-success">Unlock</button>
         </form>
 
-        <div class="alert alert-danger" role="alert" id="checkpassword-alert" hidden></div>
+        <div class="alert alert-danger" role="alert" id="checkpassword-alert" hidden style="margin-top: 2%"></div>
     </div>
 
     <script src="/js/jquery-3.2.1.min.js"></script>
