@@ -1,70 +1,54 @@
-$('#open-password').click (function () {
-    if ($('#password-form').is (':visible')) $('#password-form').hide ();
-    else $('#password-form').show ();
+$('#clear-password').click (function () {
+    $.post ('/api/clearpassword', {'uri': uri}, function (data) {
+        if (data['status'] === 'success')
+            window.location.replace (uri);
+    });
 });
 
-function check_password () {
-    $('#checkpassword-alert').hide ();
-    $.ajax ({
-        url: '/api/checkpassword',
-        type: 'POST',
-        data: {
-            'uri': uri,
-            'password': $('#password').val ()
-        },
-        success: function (data) {
-            if (data['status'] == 'success')
-                window.location.reload (true);
-            else {
-                $('#checkpassword-alert').html (data['status']);
-                $('#checkpassword-alert').show ();
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            $('#checkpassword-alert').html (errorThrown);
-            $('#checkpassword-alert').show ();
-        }
-    });
-}
-
-function change_password () {
+$('#set-password').click (function () {
     $('#setpassword-alert').hide ();
     $.ajax ({
         url: '/api/setpassword',
         type: 'POST',
+        headers: { 'X-CSRF-TOKEN': token },
         data: {
-            'uri': uri,
+            'uri'        : uri,
             'oldpassword': $('#old-password').val (),
             'newpassword': $('#new-password').val ()
         },
         success: function (data) {
-            if (data['status'] == 'success')
-                // if ($('#old-password').val () != $('#new-password').val ())
+            if (data['status'] === 'success')
                 window.location.replace ("/" + uri);
-            else {
-                $('#setpassword-alert').html (data['status']);
-                $('#setpassword-alert').show ();
-            }
+            else
+                $('#set-password-alert').html (data['status']).show ();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            $('#setpassword-alert').html (errorThrown);
-            $('#setpassword-alert').show ();
+            $('#set-password-alert').html (errorThrown).show ();
         }
     });
-}
 
-function clear_password () {
+    return false;
+});
+
+$('#check-password').click (function () {
+    $('#checkpassword-alert').empty ().hide ();
     $.ajax ({
-        url: '/api/clearpassword',
+        url: '/api/checkpassword',
         type: 'POST',
-        data: { 'uri': uri },
+        data: {
+            'uri'     : uri,
+            'password': $('#password').val ()
+        },
         success: function (data) {
-            if (data['status'] == 'success')
-                window.location.replace (uri);
+            if (data['status'] === 'success')
+                window.location.reload (true);
+            else
+                $('#checkpassword-alert').html (data['status']).show ();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            $('#setpassword-alert').html (errorThrown);
-            $('#setpassword-alert').show ();
+            $('#checkpassword-alert').html (errorThrown).show ();
         }
     });
-}
+
+    return false;
+});

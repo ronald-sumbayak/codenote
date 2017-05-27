@@ -15,9 +15,9 @@ class CreateCodesTable extends Migration
     {
         Schema::create('codes', function (Blueprint $table) {
             $table->string ('uri');
-            $table->string ('user', 32)->default ('umum');
+            $table->integer ('user')->default (0);
             $table->string ('password', 128)->nullable ();
-            $table->integer ('caret')->default (0);
+//            $table->integer ('caret')->default (0);
 
             $table->integer ('langId')->default (0);
             $table->string ('langName', 64)->default ('text');

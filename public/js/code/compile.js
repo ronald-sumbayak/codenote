@@ -3,8 +3,7 @@ var submit = 'http://2fd2a00c.compilers.sphere-engine.com/api/v3/submissions';
 function showLoading () {
     $('.code-form').prop ('disabled', true);
     $('.compilation-alert').hide ();
-    $('#output').empty ();
-    $('#output').hide ();
+    $('#output').empty ().hide ();
 }
 
 function hideLoading () {
@@ -16,7 +15,6 @@ function postResult (data) {
 
     $.post ('/api/postresult', {
         'uri': uri,
-        'caret': 0,
         'langId': data['langId'],
         'langName': data['langName'],
         'langVersion': data['langVersion'],
@@ -32,32 +30,27 @@ function postResult (data) {
 function displayResult (data) {
     postResult (data);
 
-    if (data['result'] == 15) {
-        $('#success-alert').html ("Success! time:" + data['time'] + " memory:" + data['memory']);
-        $('#success-alert').show ();
-        $('#output').html (data['output']);
-        $('#output').show ();
+    if (data['result'] === 15) {
+        $('#success-alert').html ("Success! time:" + data['time'] + " memory:" + data['memory']).show ();
+        $('#output').html (data['output']).show ();
     }
     else {
         var errorText;
-        if (data['result'] == 11) {
+        if (data['result'] === 11) {
             errorText = "compilation error";
-            $('#cmpinfo-alert').html (data['cmpinfo'].replace ('\n', "<br>"));
-            $('#cmpinfo-alert').show ();
+            $('#cmpinfo-alert').html (data['cmpinfo'].replace ('\n', "<br>")).show ();
         }
-        else if (data['result'] == 12) {
+        else if (data['result'] === 12) {
             errorText = "runtime error! " + "signal:" + data['signal'];
-            $('#stderr-alert').html (data['stderr'].replace ('\n', "<br>"));
-            $('#stderr-alert').show ();
+            $('#stderr-alert').html (data['stderr'].replace ('\n', "<br>")).show ();
         }
 
-        else if (data['result'] == 13) errorText = 'time limit exceeded ' + data['time'] + 's';
-        else if (data['result'] == 17) errorText = 'memory limit exceeded ' + data['memory'] + 'kb';
-        else if (data['result'] == 19) errorText = 'illegal system call';
-        else if (data['result'] == 20) errorText = 'internal error';
+        else if (data['result'] === 13) errorText = 'time limit exceeded ' + data['time'] + 's';
+        else if (data['result'] === 17) errorText = 'memory limit exceeded ' + data['memory'] + 'kb';
+        else if (data['result'] === 19) errorText = 'illegal system call';
+        else if (data['result'] === 20) errorText = 'internal error';
 
-        $('#error-alert').html (errorText);
-        $('#error-alert').show ();
+        $('#error-alert').html (errorText).show ();
     }
 
     hideLoading ();
@@ -76,27 +69,25 @@ function retrieveResult (id) {
             data = [data.slice (0, 1), "\"id\":", id, ",", data.slice (1)].join ('');
 
             $.post ('/api/convert', { 'text': data }, function (convert) {
-                if (convert['error'] != "OK") {
-                    $('#error-alert').html (convert['error']);
-                    $('#error-alert').show ();
+                if (convert['error'] !== "OK") {
+                    $('#error-alert').html (convert['error']).show ();
                     hideLoading ();
                 }
                 else {
                     var status;
                     if (convert['status'] < 0) status = "waiting...";
-                    else if (convert['status'] == 0) status = "Run";
-                    else if (convert['status'] == 1) status = "compiling...";
-                    else if (convert['status'] == 3) status = "running...";
+                    else if (convert['status'] === 0) status = "Run";
+                    else if (convert['status'] === 1) status = "compiling...";
+                    else if (convert['status'] === 3) status = "running...";
 
                     $('#run').html (status);
-                    if (convert['status'] == 0) displayResult (convert);
+                    if (convert['status'] === 0) displayResult (convert);
                     else retrieveResult (convert['id']);
                 }
             }, 'json');
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            $('#error-alert').html (errorThrown);
-            $('#error-alert').show ();
+            $('#error-alert').html (errorThrown).show ();
             hideLoading ();
         }
     });
@@ -118,8 +109,7 @@ function run () {
             retrieveResult (data['id']);
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            $('#error-alert').html (errorThrown);
-            $('#error-alert').show ();
+            $('#error-alert').html (errorThrown).show ();
             hideLoading ();
         }
     });

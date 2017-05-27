@@ -17,6 +17,7 @@ function retrieveLanguage () {
 function retrieveToken () {
     $.ajax ({
         url: '/api/token',
+        type: 'post',
         success: function (data) {
             token = data;
             retrieveLanguage ();

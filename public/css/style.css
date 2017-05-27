@@ -2,14 +2,14 @@ body{
 	margin: 0;
 	padding: 0;
 	font-family: 'Open Sans', sans-serif;
-    background-color:#edeeef;
+    background-color:#ffffff;
  }
 a:hover, a:visited, a{
 	text-decoration: none;
 }
 /*header area*/
 .top-header{
-	background: #424344;
+	background: #546e7a;
 /*	position: fixed;*/
 	width: 100%;
 	z-index: 333;
@@ -75,10 +75,30 @@ ul.nav{
   margin-top: 4px;
 }
 
-/*.code-form {
-	margin-left: 15px;
-
-}*/
+#login-dp{
+    min-width: 250px;
+    padding: 14px 14px 0;
+    overflow:hidden;
+    background-color:rgba(255,255,255,.8);
+}
+#login-dp .help-block{
+    font-size:12px
+}
+#login-dp .bottom{
+    background-color:rgba(255,255,255,.8);
+    border-top:1px solid #ddd;
+    clear:both;
+    padding:14px;
+}
+#login-dp .social-buttons{
+    margin:12px 0
+}
+#login-dp .social-buttons a{
+    width: 49%;
+}
+#login-dp .form-group {
+    margin-bottom: 10px;
+}
 
 /*banner area*/
 .banner h3{
@@ -105,7 +125,7 @@ ul.nav{
 /*footer area*/
 
 .footer p{
-	color:  #424344;
+	color:  #607d8b;
 	font-size: 12px;
 }
 .navbar-default .navbar-toggle .icon-bar {
@@ -115,7 +135,25 @@ ul.nav{
 	width: 600px;
 	height: 400px;
 }
+.logo {
+	height: 40px;
+	width: auto;
+}
 
+.footer1 {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #cfd8dc;
+  text-align: center;
+}
+.footer1 p {
+    color:  #424344;
+	font-size: 12px;
+    
+}
 
 /******************************
 responsive area

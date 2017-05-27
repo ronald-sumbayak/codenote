@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Code;
 use \DateTime;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class CodeController extends Controller
 {
@@ -12,8 +14,12 @@ class CodeController extends Controller
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         $uri   = "";
 
-        for ($i = 0; $i < 6; $i++)
-            $uri .= $chars[mt_rand (1, strlen ($chars)) - 1];
+        do {
+            $uri = "";
+            for ($i = 0; $i < 6; $i++)
+                $uri .= $chars[mt_rand (1, strlen ($chars)) - 1];
+        }
+        while (Code::find ($uri));
 
         return $uri;
     }
@@ -23,13 +29,17 @@ class CodeController extends Controller
     }
 
     public function index () {
-        $uri = $this->generateUri ();
-        while (Code::find ($uri)) $uri = $this->generateUri ();
-        return redirect ($uri);
+        $code = new Code (['uri' => $this->generateUri ()]);
+        if (Auth::check ()) $code->user = Auth::id ();
+        $code->save ();
+        return redirect ($code->uri);
     }
 
     public function open (Request $request, $uri) {
-        $code = Code::firstOrCreate (['uri' => $uri]);
+        $code = Code::find ($uri);
+
+        if (!$code)
+            $code = new Code (['uri' => $this->generateUri ()]);
 
         if ($code->password && $request->session ()->get (md5 ($code->uri)) != $code->enc ())
             return view ('protected', ['code' => $code]);
@@ -62,7 +72,7 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::firstOrCreate (['uri' => $request->uri]);
+        $code = Code::find ($request->uri);
 
         if ($code->password) {
             if (!$request->oldpassword)
@@ -85,8 +95,7 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::firstOrCreate (['uri' => $request->uri]);
-
+        $code = Code::find ($request->uri);
         $code->password = null;
         $code->save ();
         return $this->simpleJson ('success');
@@ -95,9 +104,9 @@ class CodeController extends Controller
 
     public function changeUri (Request $request) {
         if (!$request->uri)
-            return $this->simpleJson ('you must provide uri');
+            return $this->simpleJson ('you must provide an uri');
 
-        $code = Code::firstOrCreate (['uri' => $request->uri]);
+        $code = Code::find ($request->uri);
 
         if (!$request->newuri)
             return $this->simpleJson ('you must provide new-uri');
@@ -106,7 +115,7 @@ class CodeController extends Controller
             return $this->simpleJson ('URL not valid');
 
         if (Code::find ($request->newuri))
-            return $this->simpleJson ('URL already tekan');
+            return $this->simpleJson ('URL already taken');
 
         $request->session ()->forget (md5 ($code->uri));
         $code->uri = $request->newuri;
@@ -119,7 +128,7 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::firstOrCreate (['uri' => $request->uri]);
+        $code = Code::find ($request->uri);
 
         if (!$request->lastupdate)
             return $this->simpleJson ('you must provide lastupdate');
@@ -134,11 +143,10 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::firstOrCreate (['uri' => $request->uri]);
 
+        $code = Code::find ($request->uri);
         $code->source = $request->source;
         $code->input = $request->input;
-        $code->caret = $request->caret;
         $code->save ();
         return $this->simpleJson ('success');
     }
@@ -147,9 +155,9 @@ class CodeController extends Controller
         if (!$request->uri)
             return $this->simpleJson ('you must provide uri');
 
-        $code = Code::firstOrCreate (['uri' => $request->uri]);
 
-        if ($request->caret) $code->caret = $request->caret;
+        $code = Code::find ($request->uri);
+//        if ($request->caret) $code->caret = $request->caret;
         if ($request->langId) $code->langId = $request->langId;
         if ($request->langName) $code->langName = $request->langName;
         if ($request->langVersion) $code->langVersion = $request->langVersion;

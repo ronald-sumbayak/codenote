@@ -12,7 +12,7 @@ class Code extends Model
     protected $guarded = [];
     protected $hidden = ['user', 'password'];
     protected $attributes = [
-        'user'     => 'umum',
+        'user'     => 0,
         'langName' => 'text',
         'caret'    => 0
     ];
