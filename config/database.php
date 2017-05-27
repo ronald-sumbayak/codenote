@@ -20,7 +20,7 @@ return [
     |
     */
 
-    'default' => env ('DB_CONNECTION', 'pgsql'),
+    'default' => env ('DB_CONNECTION', 'herokupostgres'),
 
     /*
     |--------------------------------------------------------------------------
@@ -81,6 +81,19 @@ return [
             'database' => env ('DB_DATABASE', 'gpgkonvf'),
             'username' => env ('DB_USERNAME', 'gpgkonvf'),
             'password' => env ('DB_PASSWORD', 'Cu6EOp3G97daawOFE_0yoEEEK5KbUaYG'),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'public',
+            'sslmode'  => 'prefer',
+        ],
+
+        'pgsql' => [
+            'driver'   => 'pgsql',
+            'host'     => $host,
+            'port'     => env ('DB_PORT',     '5432'),
+            'database' => $database,
+            'username' => $username,
+            'password' => $password,
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'public',
