@@ -15,6 +15,12 @@ class UserController extends Controller {
     }
 
     public function authenticate (Request $request) {
+        if (!$request->email)
+            return $this->simpleJson ("you must provide an email");
+
+        if (!$request->password)
+            return $this->simpleJson ("you must provide a password");
+
         if (!User::where ('email', $request->email))
             return $this->simpleJson ($request->email . " does not exist in our database");
 
@@ -50,6 +56,8 @@ class UserController extends Controller {
         $user->password = Hash::make ($request->password);
         $user->save ();
 
+        Auth::login ($user, true);
+        
         if ($request->uri) return redirect ($request->uri);
         return $this->simpleJson ("success");
     }
