@@ -30,16 +30,19 @@ class CodeController extends Controller
 
     public function index () {
         $code = new Code (['uri' => $this->generateUri ()]);
+        echo $code->uri;
         if (Auth::check ()) $code->user = Auth::id ();
         $code->save ();
         return redirect ($code->uri);
     }
 
     public function open (Request $request, $uri) {
-        $code = Code::find ($uri);
+        $code = Code::firstOrCreate (['uri' => $uri]);
 
-        if (!$code)
-            $code = new Code (['uri' => $this->generateUri ()]);
+        if ($code->user === 0 && Auth::check ()) {
+            $code->user = Auth::id ();
+            $code->save ();
+        }
 
         if ($code->password && $request->session ()->get (md5 ($code->uri)) != $code->enc ())
             return view ('protected', ['code' => $code]);
@@ -98,7 +101,7 @@ class CodeController extends Controller
         $code = Code::find ($request->uri);
         $code->password = null;
         $code->save ();
-        return response ()-> back ();
+        return $this->simpleJson ('success');
     }
 
 

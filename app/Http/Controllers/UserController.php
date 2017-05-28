@@ -69,7 +69,7 @@ class UserController extends Controller {
     }
 
     public function mycodes (Request $request) {
-        $codes = Code::where ('user', Auth::id ())->paginate (10);
+        $codes = Code::where ('user', Auth::id ())->paginate (7);
         return view ('mycodes', ['codes' => $codes]);
     }
 

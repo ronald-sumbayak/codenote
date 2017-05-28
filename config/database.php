@@ -1,12 +1,5 @@
 <?php
 
-$url = parse_url (getenv ("DATABASE_URL"));
-
-$host = $url["host"];
-$username = $url["user"];
-$password = $url["pass"];
-$database = substr ($url["path"], 1);
-
 return [
 
     /*
@@ -20,7 +13,7 @@ return [
     |
     */
 
-    'default' => env ('DB_CONNECTION', 'heroku'),
+    'default' => env ('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -89,11 +82,11 @@ return [
 
         'heroku' => [
             'driver'   => 'pgsql',
-            'host'     => $host,
-            'port'     => env ('DB_PORT',     '5432'),
-            'database' => $database,
-            'username' => $username,
-            'password' => $password,
+            'host'     => 'ec2-54-83-205-71.compute-1.amazonaws.com',
+            'port'     => '5432',
+            'database' => 'd68hns1k7rqmtg',
+            'username' => 'rtznconihatswo',
+            'password' => 'be3370ed43e660f84c1a4932af9a1065b17ee00c67947a5e5ece1cf1ce88a565',
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'public',

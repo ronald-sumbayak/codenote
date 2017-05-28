@@ -10,6 +10,7 @@ $('#login').click (function (e) {
             'password': $('#password').val ()
         },
         success: function (data) {
+            console.log (data);
             if (data['status'] === 'success')
                 window.location.replace ("/" + uri);
             else

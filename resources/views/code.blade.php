@@ -6,7 +6,7 @@
 
 @section ('styles')
     <link rel="stylesheet" href="/css/styles/default.css">
-    <link rel="stylesheet" href="/css/styles/github.com">
+    <link rel="stylesheet" href="/css/styles/darcula.css">
 @endsection
 
 @section ('content')

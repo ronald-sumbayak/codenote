@@ -1,12 +1,16 @@
 $('#clear-password').click (function () {
+    $('#setpassword-alert').empty ().hide ();
     $.post ('/api/clearpassword', {'uri': uri}, function (data) {
+        console.log (data);
         if (data['status'] === 'success')
             window.location.replace (uri);
     });
+
+    return false;
 });
 
 $('#set-password').click (function () {
-    $('#setpassword-alert').hide ();
+    $('#setpassword-alert').empty ().hide ();
     $.ajax ({
         url: '/api/setpassword',
         type: 'POST',

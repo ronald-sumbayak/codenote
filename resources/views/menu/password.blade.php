@@ -22,11 +22,15 @@
                         </div>
 
                         <div class="form-group col-sm-6">
-                            <button id="clear-password" class="btn btn-block btn-danger">Remove</button>
+                            <button type="submit" id="clear-password" class="btn btn-block btn-danger">Remove</button>
                         </div>
                     </div>
 
                 @else
+
+                    <div class="form-group" hidden>
+                        <input id="old-password" class="form-control" type="password" placeholder="old password" required>
+                    </div>
 
                     <div class="form-group">
                         <input id="new-password" class="form-control" type="password" placeholder="new password" required>
