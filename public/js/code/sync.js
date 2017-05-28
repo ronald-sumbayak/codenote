@@ -17,6 +17,7 @@ function postData () {
         'source': $('#sourceCode').val (),
         'input': $('#input').val ()
     });
+    lastupdate = new Date ();
 }
 
 function update () {

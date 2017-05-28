@@ -5,8 +5,8 @@
           <p>  Made with <i class="fa fa-heart-o"></i> by Kerja.In </p>
         </div>
 
-        <div class="text-center">
-            <p> Copyright <i class="fa fa-copyright"></i> 2017 </p>
+        <div>
+            <p style="margin-right: 10%;"> Copyright <i class="fa fa-copyright"></i> 2017 </p>
         </div>
 
     </div>

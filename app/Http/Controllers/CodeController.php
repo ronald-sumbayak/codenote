@@ -122,6 +122,7 @@ class CodeController extends Controller
 
         $request->session ()->forget (md5 ($code->uri));
         $code->uri = $request->newuri;
+        if (Auth::check ()) $code->user = Auth::id ();
         $code->save ();
         $request->session ()->put (md5 ($code->uri), $code->enc ());
         return $this->simpleJson ('success');

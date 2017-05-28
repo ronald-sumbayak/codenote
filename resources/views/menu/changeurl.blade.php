@@ -1,5 +1,5 @@
 <li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-link"></i> Change URL</a>
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-link"></i> change URL</a>
     <ul id="login-dp" class="dropdown-menu">
         <div class="row">
             <div class="col-md-12">

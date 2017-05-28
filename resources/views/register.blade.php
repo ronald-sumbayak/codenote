@@ -18,11 +18,11 @@
         }
     </style>
 
-    <div class="container">
+    <div class="container" style="margin-top: 12.5%;">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="panel panel-default">
-                    <div class="panel-heading text-center">Register</div>
+                    <div class="panel-heading text-center"> <strong> REGISTER </strong></div>
                     <div class="panel-body" >
                         <form class="form-horizontal"  >
 

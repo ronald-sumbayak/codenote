@@ -5,7 +5,7 @@
 @endsection
 
 @section ('navbar-content')
-    <li><a href="/">New Note</a></li>
+    <li><a href="/">new note</a></li>
     @include ('menu.account')
 @endsection
 

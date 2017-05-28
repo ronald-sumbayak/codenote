@@ -54,17 +54,17 @@ ul.nav{
 	padding: 0;
 }
 .navbar-default .navbar-nav>li>a {
- 	font-size: 12px;
+ 	font-size: 14px;
 	color: #fff;
-	text-transform: uppercase;
-	font-weight: 800;
+/*	text-transform: uppercase;*/
+	font-weight: 600;
 	transition: all .7s ease 0s;
 	-webkit-transition: all .7s ease 0s;
 	-moz-transition: all .7s ease 0s;
 	-o-transition: all .7s ease 0s;
 	-ms-transition: all .7s ease 0s;
 /*	padding: 12px 20px;*/
-	border-radius: 5px;
+/*	border-radius: 5px;*/
 }
 .navbar-default .navbar-nav>li>a:hover{
 	color: #424344;
@@ -72,7 +72,7 @@ ul.nav{
 }
 .navbar-default .navbar-toggle {
   border-color: #fff;
-  margin-top: 4px;
+ /* margin-top: 4px;*/
 }
 
 #login-dp{

@@ -5,7 +5,7 @@
 @endsection
 
 @section ('navbar-content')
-    <li><a href="/">New Note</a></li>
+    <li><a href="/">new note</a></li>
 
     @include ('menu.password')
 
@@ -36,7 +36,7 @@
                 </div>
 
                 <div id="compile-button" hidden style="margin-bottom: 20px;" >
-                    <button class="code-form btn btn-info" id="open-input" style="float: left;">Input</button>
+                    <button class="code-form btn btn-info" id="open-input" style="float: left; margin-left: 1%;">Input</button>
                     <button class="code-form btn btn-primary" onclick="run ()" id="run" style="float: right;">Run</button>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                 <div class="alert alert-success compilation-alert" role="alert" id="success-alert" hidden></div>
                 <div class="alert alert-danger compilation-alert" role="alert" id="error-alert" hidden></div>
                 <div class="alert alert-info compilation-alert" role="alert" id="stderr-alert" hidden></div>
-                <div class="alert alert-warning compilation-alert" role="alert" id="cmpinfo-alert" hidden></div>
+                <div class="alert alert-warning compilation-alert" role="alert" id="cmpinfo-alert" hidden style="text-align: left;"></div>
                 <div style="height: auto; resize: horizontal; margin-bottom: 40px;"><div class="form-control" id="output" style="resize: vertical; text-align: left; height: 100%; display: none;"></div></div>
             </div>
         </div>
