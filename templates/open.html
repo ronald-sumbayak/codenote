@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>codenote / {{ code.uri }}</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="google-site-verification" content="KuyZohRF9cc5EHQ07UJaK4_AE24-foc8Va-2mMpm8No" />
+
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">#}
+</head>
+<body>
+    <div class="container-fluid" style="margin-top: 5vh; margin-bottom: 5vh">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-6">
+                        <p>CODENOTE</p>
+                    </div>
+                    <div class="col-6 text-right">
+                        <div class="btn-group" role="group" aria-label="Control Buttons">
+                            <a href="/" class="btn btn-link"><i class="fa fa-fw fa-plus"></i></a>
+                            <a href="{% url 'upload' %}" class="btn btn-link"><i class="fa fa-fw fa-upload"></i></a>
+                            <a href="#" class="btn btn-link"><i class="fa fa-fw fa-lock"></i></a>
+                            <a href="#" class="btn btn-link"><i class="fa fa-fw fa-edit"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <textarea class="form-control" title="your_note" style="resize: none; height: 60vh"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a href="/share/{{ code.code }}" class="btn btn-link"><i class="fa fa-fw fa-share-alt"></i></a>
+                        <a href="/raw/{{ code.code }}" class="btn btn-link"><i class="fa fa-fw fa-file-text"></i></a>
+                        <a href="/highlight/{{ code.code }}" class="btn btn-link"><i class="fa fa-fw fa-code"></i></a>
+                        <a href="/download/{{ code.code }}" class="btn btn-link"><i class="fa fa-fw fa-file-code-o"></i></a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3 form-group">
+                        <select class="form-control" title="compiler">
+                            <option selected disabled hidden>Compiler</option>
+                            {% for c in compilers %}
+                                <option value="{{ c.id }}">{{ c.name }} ({{ c.ver }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="row">
+                            <div class="col-auto">
+                                <button href="#" class="btn btn-outline-primary form-control"><i class="fa fa-fw fa-keyboard-o"></i> Input</button>
+                            </div>
+                            <div class="col-auto align-right ml-auto">
+                                <button href="#" class="btn btn-success form-control"><i class="fa fa-fw fa-terminal"></i> Run</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{#    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>#}
+{#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>#}
+    <!--script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script-->
+{#    <script src="https://use.fontawesome.com/c5a2cdae5e.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>#}
+</body>
+</html>
