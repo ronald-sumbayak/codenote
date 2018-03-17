@@ -2,10 +2,10 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 
 from core.views import CodeView, LazyView
-from web.views import RenderView
+from web.views import LazyRenderView
 
 
-class Highlight (CodeView, RenderView):
+class Highlight (CodeView, LazyRenderView):
     pass
 
 
@@ -21,7 +21,7 @@ class Download (CodeView, LazyView):
         return response
 
 
-class Locked (CodeView, RenderView):
+class Locked (CodeView, LazyRenderView):
     def code_not_authorized (self):
         print ('cok')
         return True

@@ -1,136 +1,111 @@
 from pprint import pprint
 
 from django.http import JsonResponse
-from django.utils.translation import ugettext_lazy
 from rest_framework import serializers
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from sphere_engine import CompilersClientV3
 
 from codenote.settings import COMPILERS_API_ENDPOINT, COMPILERS_API_TOKEN
 from core.models import Code, Compiler
-from core.serializers import CodeSerializer
-from core.views import CodeView, RenderView
+from core.serializers import CodeSerializer, URISerializer, CompilerSerializer
+from core.views import LazyAPIView, LazyRenderView
 
 
-def refresh_compilers_list (request):
+class RefreshCompilerList (LazyAPIView):
+    def validate (self):
+        pass
+    
+    def post (self):
+        client = CompilersClientV3 (COMPILERS_API_TOKEN, COMPILERS_API_ENDPOINT)
+        result: dict = client.compilers ()
+        if result.get ('error') == 'OK':
+            for c in result.get ('items'):
+                compiler = Compiler.objects.filter (id = c.get ('id'))
+                compiler.update_or_create (defaults = c)
+            return Response (result)
+        else:
+            raise LazyAPIView.Error ('Failed to retrieve compiler List')
+
+
+def refresh_compilers (request):
     client = CompilersClientV3 (COMPILERS_API_TOKEN, COMPILERS_API_ENDPOINT)
     print (client.api_client)
-    compilers = client.compilers ()
+    compilers: dict = client.compilers ()
     for c in compilers['items']:
-        compiler = Compiler.objects.filter (id = c.get ('id', ))
-        print (c.get ('id', ))
+        compiler = Compiler.objects.filter (id = c.get ('id'))
+        print (c.get ('id'))
         pprint (compiler, indent = 4)
         compiler.update_or_create (defaults = c)
     return JsonResponse (compilers)
 
 
-class Lock (APIView):
-    class Serializer (serializers.Serializer):
-        uri = serializers.SlugField ()
-        password = serializers.CharField (trim_whitespace = False)
-        
-        def update (self, instance, validated_data):
-            pass
-        
-        def create (self, validated_data):
-            pass
-        
-        def validate (self, attrs):
-            uri = attrs.get ('uri')
-            password = attrs.get ('password')
-            if uri and password:
-                try:
-                    attrs['code'] = Code.objects.get (uri = uri)
-                    return attrs
-                except Code.DoesNotExist:
-                    raise serializers.ValidationError (ugettext_lazy ('Code Does Not Exists'))
-            else:
-                raise serializers.ValidationError (ugettext_lazy ('Must include "uri" and "password"'))
+class Lock (LazyAPIView):
+    _serializer_class_out = CodeSerializer
     
     def post (self):
-        serializer = Lock.Serializer (data = self.request.data)
-        serializer.is_valid (raise_exception = True)
-        code = serializer.validated_data.get ('code')
-        code.set_password (serializer.validated_data.get ('password'))
+        code = self.input.validation_result
+        code.set_password (self.input.validated_data.get ('password'))
         code.save ()
-        return Response (CodeSerializer (code).data)
+        self.output = code
+    
+    class InputSerializer (URISerializer):
+        password = serializers.CharField (trim_whitespace = False)
 
 
-class Unlock (CodeView, RenderView):
-    class Serializer (serializers.Serializer):
-        uri = serializers.SlugField ()
-        
-        def update (self, instance, validated_data):
-            pass
-        
-        def create (self, validated_data):
-            pass
-        
-        def validate (self, attrs):
-            uri = attrs.get ('uri')
-            if uri:
-                try:
-                    attrs['code'] = Code.objects.get (uri = uri)
-                    return attrs
-                except Code.DoesNotExist:
-                    raise serializers.ValidationError (ugettext_lazy ('Code Does Not Exists'))
-            else:
-                raise serializers.ValidationError (ugettext_lazy ('Must include "uri"'))
-                
+class CheckPassword (LazyAPIView):
+    _serializer_class_out = CodeSerializer
+    
     def post (self):
-        serializer = Unlock.Serializer (data = self.request.data)
-        serializer.is_valid (raise_exception = True)
-        code = serializer.validated_data.get ('code')
+        code = self.input.validation_result
+        if not code.check_password (self.input.validated_data.get ('password')):
+            raise LazyAPIView.Error ('Wrong Password')
+        self.output = code
+    
+    class InputSerializer (URISerializer):
+        password = serializers.CharField (trim_whitespace = False)
+
+
+class Unlock (LazyAPIView):
+    _serializer_class_out = CodeSerializer
+    
+    def post (self):
+        code = self.input.validation_result
         code.password = None
         code.save ()
-        return Response (CodeSerializer (code).data)
-
-
-class Rename (CodeView, APIView):
-    class Serializer (serializers.Serializer):
-        uri = serializers.SlugField ()
-        new_uri = serializers.SlugField ()
-
-        def update (self, instance, validated_data):
-            pass
-
-        def create (self, validated_data):
-            pass
-
-        def validate (self, attrs):
-            uri = attrs.get ('uri')
-            new_uri = attrs.get ('new_uri')
-            if uri and new_uri:
-                try:
-                    attrs['code'] = Code.objects.get (uri = uri)
-                except Code.DoesNotExist:
-                    raise serializers.ValidationError (ugettext_lazy ('Code does not exists'))
+        self.output = code
                 
-                try:
-                    Code.objects.get (uri = new_uri)
-                    raise serializers.ValidationError (ugettext_lazy ('URI already used'))
-                except Code.DoesNotExist:
-                    return attrs
-            else:
-                raise serializers.ValidationError (ugettext_lazy ('Must include "uri" and "new_uri"'))
+    class InputSerializer (URISerializer):
+        pass
+
+
+class Rename (LazyAPIView):
+    _serializer_class_out = CodeSerializer
     
     def post (self):
-        serializer = Rename.Serializer (data = self.request.data)
-        serializer.is_valid (raise_exception = True)
-        code = serializer.validated_data.get ('code')
-        code.uri = serializer.validated_data.get ('new_uri')
+        code = self.input.validation_result
+        code.uri = self.input.validated_data.get ('new_uri')
         code.save ()
-        return Response (CodeSerializer (code).data)
+        self.output = code
+    
+    class InputSerializer (URISerializer):
+        new_uri = serializers.SlugField ()
+        
+        def validate (self, attrs):
+            super ().validate (attrs)
+            try:
+                Code.objects.get (uri = attrs.get ('new_uri'))
+                raise LazyAPIView.Error ('URI already taken')
+            except Code.DoesNotExist:
+                return attrs
 
 
-class Compile (RenderView):
+class Compile (LazyAPIView):
     pass
 
 
-class Check (RenderView):
+class CheckSubmission (LazyAPIView):
     pass
 
 
-class Update (RenderView):
+class Update (LazyAPIView):
     pass

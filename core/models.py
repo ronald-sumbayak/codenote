@@ -146,7 +146,7 @@ class Code (models.Model):
         'URI',
         max_length = 64,
         unique = True,
-        help_text = 'uri identifier for this code, randomly generated if not set')
+        help_text = 'URI identifier for this code, randomly generated if not set')
     source = models.TextField (
         'Source',
         blank = True,
@@ -179,7 +179,7 @@ class Code (models.Model):
     def check_password (self, raw_password):
         def setter (raw_password):
             self.set_password (raw_password)
-            self.save (update_fields = 'password')
+            self.save (update_fields = ['password'])
         return check_password (raw_password, self.password, setter)
     
     def remove_password (self):

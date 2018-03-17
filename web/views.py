@@ -2,7 +2,7 @@ import exrex
 from django.shortcuts import redirect
 
 from core.models import Code, Compiler
-from core.views import CodeView, LazyView, RenderView
+from core.views import CodeView, LazyView, LazyRenderView
 
 
 def generate_random_uri ():
@@ -25,11 +25,11 @@ class New (LazyView):
         return redirect ('open', generate_random_uri ())
 
 
-class Upload (RenderView):
+class Upload (LazyRenderView):
     pass
 
 
-class Open (CodeView, RenderView):
+class Open (CodeView, LazyRenderView):
     def code_does_not_exist (self):
         return Code.objects.create (owner = self.user, uri = self.uri)
     
