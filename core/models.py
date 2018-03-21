@@ -20,37 +20,51 @@ class Compiler (models.Model):
     short = models.CharField (
         'Compiler Short Name',
         max_length = 128,
+        blank = True,
+        null = True,
         help_text = 'short name')
     ace = models.CharField (
         'Ace',
         max_length = 128,
         blank = True,
+        null = True,
         help_text = 'syntax highlighting identifier for Ace')
     geshi = models.CharField (
         'Geshi',
         max_length = 128,
         blank = True,
+        null = True,
         help_text = 'syntax highlighting identifier for Geshi')
     pygments = models.CharField (
         'Pygments',
         max_length = 128,
         blank = True,
+        null = True,
         help_text = 'syntax highlighting identifier for Pygments')
     highlights = models.CharField (
         'Highlights',
         max_length = 128,
         blank = True,
+        null = True,
         help_text = 'syntax highlighting identifier for Highlights')
     rouge = models.CharField (
         'Rouge',
         max_length = 128,
         blank = True,
+        null = True,
         help_text = 'syntax highlighting identifier for Rouge')
     codemirror = models.CharField (
         'CodeMirror',
         max_length = 128,
         blank = True,
+        null = True,
         help_text = 'syntax highlighting identifier for CodeMirror')
+    mime = models.CharField (
+        'MIME',
+        max_length = 128,
+        blank = True,
+        null = True,
+        help_text = 'file MIME type')
     
     def __str__ (self):
         return self.name
@@ -179,17 +193,16 @@ class Code (models.Model):
     def check_password (self, raw_password):
         def setter (raw_password):
             self.set_password (raw_password)
-            self.save (update_fields = ['password'])
+            self.save (update_fields=['password'])
         return check_password (raw_password, self.password, setter)
     
     def remove_password (self):
         self.password = None
     
-    def commit (self, source, version):
-        if self.version == version:
-            self.source = source
-            self.version += 1
-    
+    def save (self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.version += 1
+        super ().save (force_insert, force_update, using, update_fields)
+
     @property
     def data (self):
         return {
@@ -205,7 +218,7 @@ class Code (models.Model):
 
 
 class Reserved (models.Model):
-    word = models.CharField (max_length = 64)
+    word = models.CharField (max_length=64)
     
     def __str__ (self):
         return self.word
