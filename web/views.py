@@ -34,4 +34,4 @@ class Open (CodeView, LazyRenderView):
         return Code.objects.create (owner=self.user, uri=self.uri)
     
     def get (self):
-        self.add_data ('compilers', Compiler.objects.filter (codemirror__isnull = False, mime__isnull = False))
+        self.add_data ('compilers', Compiler.objects.filter (codemirror__isnull=False, mime__isnull=False))
