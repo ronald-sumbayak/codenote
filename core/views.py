@@ -1,7 +1,8 @@
 from django.http.response import HttpResponseBase
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.views import View
-from rest_framework import serializers, generics
+from rest_framework import serializers
+from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -36,7 +37,7 @@ class Lazy (object):
         :return: response to be given when no handler provided (http request not supported)
         :rtype: HttpResponseBase
         """
-        pass
+        raise MethodNotAllowed (self.request.method)
     
     def respond (self):
         """
@@ -83,6 +84,15 @@ class Lazy (object):
         base class for Error that should be caught by this view. It should handle error by itself.
         """
         def handle (self, view):
+            """
+            If return something, it will be treated as early response. You can raise another
+            exception here to forward it to django's top level exception cather.
+            
+            :param view: view this exception was caught at
+            :type view: Lazy
+            :return: response or nothing
+            :rtype: Union[HttpResponseBase, None]
+            """
             raise NotImplementedError ('Every Exception derived from LazyView.Error must implements its own exception handling')
 
 
@@ -93,6 +103,7 @@ class LazyView (Lazy, View):
         self.kwargs = kwargs
         
         if request.user.is_authenticated:
+            ''' set self.user only if it is authenticated to avoid AnonymousUser '''
             self.user = request.user
         
         try:
@@ -241,8 +252,8 @@ class LazyAPIView (Lazy, APIView):
         """
         validate data using serializer returned by self.input_serializer
         """
-        input = self.input_serializer (data = self.request.data)
-        input.is_valid (raise_exception = True)
+        input = self.input_serializer (data=self.request.data)
+        input.is_valid (raise_exception=True)
         self.__input = input
     
     def get_output (self):
@@ -294,12 +305,14 @@ class LazyAPIView (Lazy, APIView):
         :rtype: HttpResponseBase
         """
         request = self.initialize_request (request, *args, **kwargs)
+        print (request.data)
         self.request = request
         self.args = args
         self.kwargs = kwargs
         self.headers = self.default_response_headers
         
         if request.user.is_authenticated:
+            ''' set self.user only if it is authenticated to avoid AnonymousUser '''
             self.user = request.user
     
         try:
@@ -325,19 +338,30 @@ class LazyAPIView (Lazy, APIView):
         def __init__ (self, details):
             """
             :param details: details of information to be displayed about this exception
-            :type details: Union[str, list, dict]
+            :type details: Union[str, tuple, list, dict]
             """
             self.details = details
         
         def handle (self, view):
             """
-            user serializers.ValidationError to forward exception to Django exception cather
-            which render exception as json response.
+            use serializers.ValidationError to forward exception to Django Rest Framework exception
+            cather which render exception as json response.
+            If return something, it will be treated as early response.
             
             :param view: view this exception was caught at.
             :type view: LazyAPIView
+            :return: response
+            :rtype: HttpResponseBase
             """
-            raise serializers.ValidationError ({'details': self.details})
+            if isinstance (self.details, dict):
+                detail = self.details
+            elif isinstance (self.details, tuple):
+                detail = {self.details[0]: self.details[1]}
+            else:
+                detail = {'details': self.details}
+            print (detail)
+            raise serializers.ValidationError (detail)
+            # raise serializers.ValidationError ({'details': self.details})
     
     class SerializerNotSet (Error):
         def __init__ (self):
@@ -398,16 +422,16 @@ class CodeView (URIView):
         The request being handled is not authorized to access this code.
         This method will be called at dispatch level.
         
-        :return: Code
-        :rtype:
+        :return: response in this case
+        :rtype: HttpResponseBase
         """
-        return redirect ('locked', self.uri)
+        pass
     
     def extract_code (self):
         try:
-            return Code.objects.get (uri = self.uri)
+            return Code.objects.get (uri=self.uri)
         except Code.DoesNotExist:
-            _ = Code.objects.get (uri = '_')
+            _ = Code.objects.get (uri='_')
             return self.code_does_not_exist () or _
     
     def validate (self):
