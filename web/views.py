@@ -7,7 +7,7 @@ from core.views import CodeView, LazyView, LazyRenderView
 
 def generate_random_uri ():
     """
-    Generate random URI have not been used.
+    Generate random URI that has not been used.
     
     :return: uri
     :rtype: str
@@ -15,7 +15,7 @@ def generate_random_uri ():
     while True:
         uri = exrex.getone ('[0-9A-Za-z]{6}')
         try:
-            Code.objects.get (uri = uri)
+            Code.objects.get (uri=uri)
         except Code.DoesNotExist:
             return uri
 
@@ -31,7 +31,7 @@ class Upload (LazyRenderView):
 
 class Open (CodeView, LazyRenderView):
     def code_does_not_exist (self):
-        return Code.objects.create (owner = self.user, uri = self.uri)
+        return Code.objects.create (owner=self.user, uri=self.uri)
     
     def get (self):
-        self.add_data ('compilers', Compiler.objects.all ())
+        self.add_data ('compilers', Compiler.objects.filter (codemirror__isnull = False, mime__isnull = False))

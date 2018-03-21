@@ -27,7 +27,7 @@ class URISerializer (ViewSerializer):
     
     def validate (self, attrs):
         try:
-            self.set_validation_result (Code.objects.get (uri = attrs.get ('uri')))
+            self.set_validation_result (Code.objects.get (uri=attrs.get ('uri')))
             return attrs
         except Code.DoesNotExist:
             raise LazyAPIView.Error ('Code Does Not Exists')
@@ -40,7 +40,7 @@ class SubmissionSerializer (serializers.ModelSerializer):
 
 
 class CodeSerializer (serializers.ModelSerializer):
-    password = serializers.CharField (write_only = True)
+    password = serializers.CharField (write_only=True)
     
     class Meta:
         model = models.Code

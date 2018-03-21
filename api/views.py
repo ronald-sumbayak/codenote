@@ -12,6 +12,8 @@ from core.views import LazyAPIView, LazyRenderView
 
 
 class RefreshCompilerList (LazyAPIView):
+    _serializer_class = CompilerSerializer
+    
     def validate (self):
         pass
     
@@ -20,8 +22,18 @@ class RefreshCompilerList (LazyAPIView):
         result: dict = client.compilers ()
         if result.get ('error') == 'OK':
             for c in result.get ('items'):
-                compiler = Compiler.objects.filter (id = c.get ('id'))
-                compiler.update_or_create (defaults = c)
+                for key in c:
+                    try:
+                        if len (c.get (key)) == 0:
+                            c[key] = None
+                    except TypeError:
+                        pass
+                
+                compiler, created = Compiler.objects.get_or_create (id=c.get ('id'), defaults=c)
+                if not created:
+                    for key, value in c.items ():
+                        setattr (compiler, key, value)
+                    compiler.save ()
             return Response (result)
         else:
             raise LazyAPIView.Error ('Failed to retrieve compiler List')
@@ -32,10 +44,10 @@ def refresh_compilers (request):
     print (client.api_client)
     compilers: dict = client.compilers ()
     for c in compilers['items']:
-        compiler = Compiler.objects.filter (id = c.get ('id'))
+        compiler = Compiler.objects.filter (id=c.get ('id'))
         print (c.get ('id'))
-        pprint (compiler, indent = 4)
-        compiler.update_or_create (defaults = c)
+        pprint (compiler, indent=4)
+        compiler.update_or_create (defaults=c)
     return JsonResponse (compilers)
 
 
@@ -46,10 +58,10 @@ class Lock (LazyAPIView):
         code = self.input.validation_result
         code.set_password (self.input.validated_data.get ('password'))
         code.save ()
-        self.output = code
+        self._output = code
     
     class InputSerializer (URISerializer):
-        password = serializers.CharField (trim_whitespace = False)
+        password = serializers.CharField (trim_whitespace=False)
 
 
 class CheckPassword (LazyAPIView):
@@ -59,10 +71,10 @@ class CheckPassword (LazyAPIView):
         code = self.input.validation_result
         if not code.check_password (self.input.validated_data.get ('password')):
             raise LazyAPIView.Error ('Wrong Password')
-        self.output = code
+        self._output = code
     
     class InputSerializer (URISerializer):
-        password = serializers.CharField (trim_whitespace = False)
+        password = serializers.CharField (trim_whitespace=False)
 
 
 class Unlock (LazyAPIView):
@@ -72,7 +84,7 @@ class Unlock (LazyAPIView):
         code = self.input.validation_result
         code.password = None
         code.save ()
-        self.output = code
+        self._output = code
                 
     class InputSerializer (URISerializer):
         pass
@@ -85,7 +97,7 @@ class Rename (LazyAPIView):
         code = self.input.validation_result
         code.uri = self.input.validated_data.get ('new_uri')
         code.save ()
-        self.output = code
+        self._output = code
     
     class InputSerializer (URISerializer):
         new_uri = serializers.SlugField ()
@@ -93,8 +105,8 @@ class Rename (LazyAPIView):
         def validate (self, attrs):
             super ().validate (attrs)
             try:
-                Code.objects.get (uri = attrs.get ('new_uri'))
-                raise LazyAPIView.Error ('URI already taken')
+                Code.objects.get (uri=attrs.get ('new_uri'))
+                raise LazyAPIView.Error (('new_uri', 'URI already taken'))
             except Code.DoesNotExist:
                 return attrs
 
