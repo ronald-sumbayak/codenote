@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Compiler, Submission, Code, Reserved
+from .models import Language, Submission, Code, Reserved
 
 admin.site.register ([
     Submission,
@@ -8,6 +8,6 @@ admin.site.register ([
     Reserved])
 
 
-@admin.register (Compiler)
+@admin.register (Language)
 class CompilerAdmin (admin.ModelAdmin):
     list_display = ['name', 'id', 'mime', 'highlights', 'codemirror']

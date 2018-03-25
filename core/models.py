@@ -1,24 +1,53 @@
+import re
+
+import exrex
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 
 
-class Compiler (models.Model):
+def generate_random_uri ():
+    """
+    Generate random URI that has not been used.
+
+    :return: uri
+    :rtype: str
+    """
+    while True:
+        uri = exrex.getone ('[0-9A-Za-z]{6}')
+        try:
+            Code.objects.get (uri = uri)
+        except Code.DoesNotExist:
+            return uri
+
+
+def validate_alphanumeric (value):
+    '''
+    validate the string with alphanumeric characters only
+    :param value: value
+    :type value: str
+    '''
+    if not re.match (r'^[a-zA-Z0-9]+$', value):
+        raise ValidationError ('AlphaNumeric characters only.')
+
+
+class Language (models.Model):
     id = models.IntegerField (
-        'Compiler ID',
+        'Language ID',
         primary_key = True,
-        help_text = 'compiler id')
+        help_text = 'language id')
     name = models.CharField (
-        'Compiler Name',
+        'Name',
         max_length = 128,
-        help_text = 'compiler name')
+        help_text = 'language name')
     ver = models.CharField (
-        'Compiler Version',
+        'Version',
         max_length = 128,
-        help_text = 'compiler version')
+        help_text = 'language version')
     short = models.CharField (
-        'Compiler Short Name',
+        'Short Name',
         max_length = 128,
         blank = True,
         null = True,
@@ -59,6 +88,12 @@ class Compiler (models.Model):
         blank = True,
         null = True,
         help_text = 'syntax highlighting identifier for CodeMirror')
+    highlightjs = models.CharField (
+        'CodeMirror',
+        max_length = 128,
+        blank = True,
+        null = True,
+        help_text = 'syntax highlighting identifier for highlight.js')
     mime = models.CharField (
         'MIME',
         max_length = 128,
@@ -70,7 +105,7 @@ class Compiler (models.Model):
         return self.name
     
     class Meta:
-        ordering = ['id']
+        ordering = ['name']
 
 
 class Submission (models.Model):
@@ -109,13 +144,13 @@ class Submission (models.Model):
         blank = True,
         null = True,
         help_text = 'source code to run, default: empty')
-    compiler = models.ForeignKey (
-        Compiler,
+    language = models.ForeignKey (
+        Language,
         models.SET_NULL,
         blank = True,
         null = True,
         default = 1,
-        help_text = 'compiler identifier, default: 1 (C++)')
+        help_text = 'language identifier, default: 1 (C++)')
     input = models.TextField (
         'Input',
         blank = True,
@@ -156,9 +191,10 @@ class Code (models.Model):
         null = True,
         verbose_name = 'Owner/Creator',
         help_text = 'the user logged in at the time this code/note created')
-    uri = models.SlugField (
+    uri = models.CharField (
         'URI',
         max_length = 64,
+        validators = [validate_alphanumeric],
         unique = True,
         help_text = 'URI identifier for this code, randomly generated if not set')
     source = models.TextField (
@@ -170,6 +206,7 @@ class Code (models.Model):
     password = models.CharField (
         'Password',
         max_length = 128,
+        editable = False,
         blank = True,
         null = True,
         help_text = 'password, if any')
@@ -177,12 +214,18 @@ class Code (models.Model):
         'Version',
         default = 0,
         help_text = 'version counter')
+    language = models.ForeignKey (
+        Language,
+        models.SET_NULL,
+        blank = True,
+        null = True,
+        help_text = 'latest language associated to this code')
     last_submission = models.ForeignKey (
         Submission,
         models.SET_NULL,
         blank = True,
         null = True,
-        help_text = 'last code submission')
+        help_text = 'latest code submission')
     
     def is_password_protected (self):
         return self.password is not None
