@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='submission',
             name='compiler',
-            field=models.ForeignKey(default=1, help_text='compiler identifier, default: 1 (C++)', on_delete=django.db.models.deletion.CASCADE, to='core.Compiler'),
+            field=models.ForeignKey(default=1, help_text='compiler identifier, default: 1 (C++)', on_delete=django.db.models.deletion.CASCADE, to= 'core.Language'),
         ),
         migrations.DeleteModel(
             name='SubmissionInfo',

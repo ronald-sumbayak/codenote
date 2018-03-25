@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='submission',
             name='compiler',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='Compiler', to='core.Compiler', verbose_name='Compiler'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='Compiler', to= 'core.Language', verbose_name= 'Compiler'),
             preserve_default=False,
         ),
         migrations.AddField(

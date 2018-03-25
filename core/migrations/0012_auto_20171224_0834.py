@@ -31,6 +31,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='submission',
             name='compiler',
-            field=models.ForeignKey(blank=True, default=1, help_text='compiler identifier, default: 1 (C++)', null=True, on_delete=django.db.models.deletion.SET_NULL, to='core.Compiler'),
+            field=models.ForeignKey(blank=True, default=1, help_text='compiler identifier, default: 1 (C++)', null=True, on_delete=django.db.models.deletion.SET_NULL, to= 'core.Language'),
         ),
     ]

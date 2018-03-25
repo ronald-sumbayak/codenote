@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('status', models.IntegerField(choices=[(0, 'Finished'), (1, 'Compilation'), (3, 'Running'), (-1, 'Waiting For Compilation')], help_text='current status; see section "Status and result"', verbose_name='Status')),
                 ('result', models.IntegerField(choices=[(11, 'Compilation Error'), (12, 'Runtime Error'), (13, 'Time Limit Exceeded'), (15, 'Success'), (17, 'Memory Limit Exceeded'), (19, 'Illegal System Call'), (20, 'Internal Error')], help_text='current result; see section "Status and result"', verbose_name='Result')),
                 ('signal', models.IntegerField(help_text='signal raised by the program', verbose_name='Signal')),
-                ('compiler', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.Compiler', verbose_name='Compiler')),
+                ('compiler', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to= 'core.Language', verbose_name= 'Compiler')),
             ],
         ),
         migrations.RemoveField(
@@ -62,7 +62,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='submission',
             name='compiler',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='core.Compiler'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=
+            'core.Language'),
         ),
         migrations.AlterField(
             model_name='submission',
