@@ -1,19 +1,5 @@
-.CodeMirror {
-    height: 60vh;
-}
-
-.card {
-    margin-bottom: 5vh;
-}
-
-.card-body {
-    padding: 0 0;
-}
-
-.card-header {
-    padding: 0;
-}
-
-.card-footer {
-    padding: 0;
-}
+.CodeMirror { height: 60vh; }
+.card { margin-bottom: 5vh; }
+.card-body { padding: 0 0; }
+.card-header { padding: 0; }
+.card-footer { padding: 0; }

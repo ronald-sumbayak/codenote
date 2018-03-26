@@ -1,39 +1,10 @@
-.uploader {
-    border: 2px dashed #ccc;
-}
-
-.uploader.highlight {
-    border-color: #17a2b8;
-}
-
-.uploader.error {
-    border-color: #dc3545;
-}
-
-.uploader.valid {
-    border-color: #007bff;
-}
-
-.uploader.success {
-    border-color: #28a745;
-}
-
-.uploader-hint {
-    color: #ccc;
-}
-
-.uploader-hint.highlight {
-    color: #17a2b8;
-}
-
-.uploader-hint.error {
-    color: #dc3545;
-}
-
-.uploader-hint.valid {
-    color: #007bff;
-}
-
-.uploader-hint.success {
-    color: #28a745;
-}
+.uploader { border: 2px dashed #ccc; }
+.uploader.highlight { border-color: #17a2b8; }
+.uploader.error { border-color: #dc3545; }
+.uploader.valid { border-color: #007bff; }
+.uploader.success { border-color: #28a745; }
+.uploader-hint { color: #ccc; }
+.uploader-hint.highlight { color: #17a2b8; }
+.uploader-hint.error { color: #dc3545; }
+.uploader-hint.valid { color: #007bff; }
+.uploader-hint.success { color: #28a745; }
