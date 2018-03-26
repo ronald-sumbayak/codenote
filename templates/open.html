@@ -3,8 +3,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>codenote / {{ code.uri }}</title>
+    <link rel="icon" href="{% static 'favicon.png' %}">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -14,94 +14,174 @@
     <link rel="stylesheet" href="{% static 'magnific-popup/magnific-popup.css' %}">
     <link rel="stylesheet" href="{% static 'codemirror/lib/codemirror.css' %}">
     <link rel="stylesheet" href="{% static 'material-icons/material-icons.css' %}">
-    <link rel="stylesheet" href="{% static 'css/codenote.css' %}">
+    <link rel="stylesheet" href="{% static 'css/open.css' %}">
 </head>
 
 <body style="background: #eceff1">
-    <div class="container-fluid" style="margin-top: 5vh; margin-bottom: 5vh">
+    <div class="container" style="padding-top: 5vh; padding-bottom: 5vh">
         <div class="row">
             <div class="col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="btn-group float-right" role="group" aria-label="Control Buttons">
-                            <a href="/" class="btn btn-link" data-toggle="tooltip" title="New"><i class="material-icons md-dark">add</i></a>
-                            <a href="{% url 'upload' %}" class="btn btn-link" data-toggle="tooltip" title="Upload a File"><i class="material-icons md-dark">cloud_upload</i></a>
-                            <button id="btn-password" type="button" class="btn btn-link" data-mfp-src="#password-popup" data-toggle="tooltip" title="Password"><i class="material-icons md-dark">lock</i></button>
-                            <button id="btn-uri" type="button" class="btn btn-link" data-mfp-src="#uri-popup" data-toggle="tooltip" title="Change URL"><i class="material-icons md-dark">link</i></button>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="float-right">
+                            <a
+                                href="{% url 'new' %}"
+                                class="btn btn-link"
+                                data-toggle="tooltip"
+                                title="New"><i class="material-icons md-brown">add</i></a>
+                            <a
+                                href="{% url 'upload' %}"
+                                class="btn btn-link"
+                                data-toggle="tooltip"
+                                title="Upload a File"><i class="material-icons md-brown">cloud_upload</i></a>
+                            <button
+                                type="button"
+                                class="btn btn-link code-header code-password"
+                                data-mfp-src="#password-popup"
+                                data-toggle="tooltip"
+                                title="Password"><i class="material-icons md-brown">lock</i></button>
+                            <button
+                                type="button"
+                                class="btn btn-link code-header code-uri"
+                                data-mfp-src="#uri-popup"
+                                data-toggle="tooltip"
+                                title="Change URL"><i class="material-icons md-brown">link</i></button>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-12">
-                        <textarea id="source" title="Your Note" hidden></textarea>
+                    <div class="card-body">
+                        <textarea class="code-editor" title="Your Note" hidden></textarea>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <a href="/{{ code.uri }}/share" class="btn btn-link" data-toggle="tooltip" title="Share"><i class="material-icons md-dark">share</i></a>
-                        <a href="/{{ code.uri }}/raw" class="btn btn-link" target="_blank" data-toggle="tooltip" title="Raw"><i class="material-icons md-dark">insert_drive_file</i></a>
-                        <a href="/{{ code.uri }}/code" class="btn btn-link" target="_blank" data-toggle="tooltip" title="Syntax Highlighted"><i class="material-icons md-dark">code</i></a>
-                        <a href="/{{ code.uri }}/download" class="btn btn-link" data-toggle="tooltip" title="Download"><i class="material-icons md-dark">file_download</i></a>
+                    <div class="card-footer">
+                        <a
+                            href="{% url 'share' uri=code.uri %}"
+                            class="btn btn-link"
+                            target="_blank"
+                            data-toggle="tooltip"
+                            title="Share"><i class="material-icons md-brown">share</i></a>
+                        <a
+                            href="{% url 'raw' uri=code.uri %}"
+                            class="btn btn-link"
+                            target="_blank"
+                            data-toggle="tooltip"
+                            title="Raw"><i class="material-icons md-brown">insert_drive_file</i></a>
+                        <a
+                            href="{% url 'highlight' uri=code.uri %}"
+                            class="btn btn-link"
+                            target="_blank"
+                            data-toggle="tooltip"
+                            title="Syntax Highlighted"><i class="material-icons md-brown">code</i></a>
+                        <a
+                            href="{% url 'download' uri=code.uri %}"
+                            class="btn btn-link"
+                            data-toggle="tooltip"
+                            title="Download"><i class="material-icons md-brown">file_download</i></a>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-3 form-group">
-                        <select id="compiler" class="form-control" title="Compiler">
-                            <option selected disabled hidden>Compiler</option>
-                            {% for c in compilers %}
-                                <option data-mime="{{ c.mime }}" data-codemirror="{{ c.codemirror }}" value="{{ c.id }}">{{ c.name }} ({{ c.ver }})</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-sm-9 col-xs-12">
-                        <div class="row">
-                            <div class="col-auto">
-                                <button class="btn btn-outline-secondary compile-ctrl-btn disabled" data-toggle="tooltip" title="Add Input" disabled><i class="material-icons">input</i></button>
-                            </div>
-                            <div class="col-auto align-right ml-auto">
-                                <button class="btn btn-primary compile-ctrl-btn disabled" data-toggle="tooltip" title="Run" disabled><i class="material-icons">bug_report</i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- password popup -->
-                <div id="password-popup" class="white-popup mfp-hide">
-                    <form id="form-password-locked" class="input-group form-password" {% if not code.is_password_protected %}style="display: none" {% endif %}>
-                        <input type="password" class="form-control input-password" placeholder="********" aria-label="Password" aria-describedby="password">
-                        <div class="input-group-append">
-                            <button id="btn-password-unlock" type="button" class="btn btn-outline-danger" data-toggle="tooltip" title="Unlock"><i class="material-icons">lock_open</i></button>
-                            <button id="btn-password-change" type="submit" class="btn btn-outline-secondary" data-toggle="tooltip" title="Change Password"><i class="material-icons">edit</i></button>
-                        </div>
-                        <div class="invalid-feedback"></div>
-                    </form>
-
-                    <form id="form-password-unlocked" class="input-group form-password" {% if code.is_password_protected %}style="display: none" {% endif %}>
-                        <input type="password" class="form-control input-password" placeholder="Password" aria-label="Password" aria-describedby="password">
-                        <div class="input-group-append">
-                            <button id="btn-password-set" type="submit" class="btn btn-outline-primary" data-toggle="tooltip" title="Lock"><i class="material-icons">lock_outline</i></button>
-                        </div>
-                        <div class="invalid-feedback"></div>
-                    </form>
-                </div>
-
-                <!-- uri popup -->
-                <div id="uri-popup" class="white-popup mfp-hide">
-                    <form id="form-uri" class="input-group">
-                        <input class="form-control" placeholder="URL" value="{{ code.uri }}" aria-label="URL" aria-describedby="url">
-                        <div class="input-group-append">
-                            <button id="btn-uri-rename" type="submit" class="btn btn-outline-primary" data-toggle="tooltip" title="Change URL"><i class="material-icons">edit</i></button>
-                        </div>
-                        <div class="invalid-feedback"></div>
-                    </form>
-
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <select class="form-control ide-compiler" title="Compiler">
+                    <option selected disabled hidden>Compiler</option>
+                    {% for lang in languages %}
+                        <option
+                            data-codemirror="{{ lang.codemirror }}"
+                            data-mime="{{ lang.mime }}"
+                            value="{{ lang.id }}">{{ lang.name }} ({{ lang.ver }})</option>
+                    {% endfor %}
+                </select>
+                <div class="d-sm-none" style="margin-bottom: 1rem"></div>
+            </div>
+
+            <div class="col-xs-12 col-sm-9">
+                <button
+                    class="btn btn-outline-secondary ide-btn disabled"
+                    data-toggle="tooltip"
+                    title="Specify Input (stdin)"
+                    disabled><i class="material-icons">input</i></button>
+                <button
+                    class="btn btn-primary ide-btn disabled float-right"
+                    data-toggle="tooltip"
+                    title="Run"
+                    disabled><i class="material-icons">bug_report</i></button>
+            </div>
+        </div>
+
+        <!-- password popup -->
+        <div id="password-popup" class="white-popup mfp-hide">
+            <form class="input-group code-form code-password">
+                <input
+                    id="password-locked"
+                    type="password"
+                    class="form-control input-password code-input code-password"
+                    placeholder="********"
+                    aria-label="Password"
+                    aria-describedby="password">
+                <div class="input-group-append">
+                    <button
+                        type="button"
+                        class="btn btn-outline-danger code-password code-unlock"
+                        data-toggle="tooltip"
+                        title="Unlock"><i class="material-icons">lock_open</i></button>
+                    <button
+                        type="submit"
+                        class="btn btn-outline-secondary code-password"
+                        data-toggle="tooltip"
+                        title="Change Password"><i class="material-icons">edit</i></button>
+                </div>
+                <div class="invalid-feedback"></div>
+            </form>
+
+            <form class="input-group code-form code-password">
+                <input
+                    id="password-unlocked"
+                    type="password"
+                    class="form-control code-input code-password"
+                    placeholder="Password"
+                    aria-label="Password"
+                    aria-describedby="password">
+                <div class="input-group-append">
+                    <button
+                        type="submit"
+                        class="btn btn-outline-primary code-password"
+                        data-toggle="tooltip"
+                        title="Lock"><i class="material-icons">lock_outline</i></button>
+                </div>
+                <div class="invalid-feedback"></div>
+            </form>
+        </div>
+
+        <!-- uri popup -->
+        <div id="uri-popup" class="white-popup mfp-hide">
+            <form class="input-group code-form code-uri">
+                <input
+                    class="form-control code-input code-uri"
+                    placeholder="URL"
+                    value="{{ code.uri }}"
+                    aria-label="URL"
+                    aria-describedby="url">
+                <div class="input-group-append">
+                    <button
+                        type="submit"
+                        class="btn btn-outline-primary code-uri"
+                        data-toggle="tooltip"
+                        title="Change URL"><i class="material-icons">edit</i></button>
+                </div>
+                <div class="invalid-feedback"></div>
+            </form>
+
+        </div>
     </div>
+
+    <!--suppress JSUnusedLocalSymbols -->
+    <script>
+    let uri = '{{ code.uri }}';
+    let password = {% if code.is_password_protected %}true{% else %}false{% endif %};
+    let code;
+    </script>
 
     <script src="{% static 'jquery/jquery-3.3.1.js' %}"></script>
     <script src="{% static 'popperjs/popper.min.js' %}"></script>
@@ -110,89 +190,29 @@
     <script src="{% static 'clipboardjs/clipboard.js' %}"></script>
     <script src="{% static 'magnific-popup/magnific-popup.js' %}"></script>
     <script src="{% static 'codemirror/lib/codemirror.js' %}"></script>
+    <script src="{% static 'codemirror/addon/selection/active-line.js' %}"></script>
+    <script src="{% static 'google/diff-match-patch/javascript/diff_match_patch.js' %}"></script>
 
+    <!--suppress JSUnusedLocalSymbols -->
     <script>
-    let uri = '{{ code.uri }}';
-    let cmSource;
+    let tooltips = $('[data-toggle="tooltip"]');
+    let endpoints = {
+        code: '{% url 'code' %}',
+        lock: '{% url 'lock' %}',
+        mode: '{% static 'codemirror/mode' %}',
+        rename: '{% url 'rename' %}',
+        unlock: '{% url 'unlock' %}',
+        update: '{% url 'update' %}',
+    };
 
-    $.ajaxSetup ({ cache: true });
-
-    $(window).on ('load', function () {
-        $('[data-toggle="tooltip"]').tooltip ();
-
-        cmSource = CodeMirror.fromTextArea (document.getElementById ('source'), {
-            lineNumbers : true,
-            indentUnit: 4,
-            matchBrackets: true,
-            styleActiveLine: true,
-            mode: 'text/x-c++src'
-        });
-
-        $('#compiler').change (function (eventObject) {
-            let target = $(eventObject.target).find (':selected');
-            let codemirror = target.data ('codemirror');
-            let mime = target.data ('mime');
-            $.getScript (`{% static 'codemirror/mode' %}/${codemirror}/${codemirror}.js`, function () {
-                cmSource.setOption ('mode', mime);
-                $('.compile-ctrl-btn').removeAttr ('disabled').removeClass ('disabled');
-            });
-        });
-
-        $('#btn-password').magnificPopup ({
-            type: 'inline',
-            focus: '#uri',
-            closeOnBgClick: false,
-        });
-
-        $('.form-password').submit (function (e) {
-            let inputPassword = $('.input-password');
-            inputPassword.removeClass ('is-invalid');
-            $('[data-toggle="tooltip"]').tooltip ('hide');
-            e.preventDefault ();
-            $.post ('{% url 'lock' %}', {uri: uri, password: $(e.target).find ('.input-password').val ()}, function () {
-                $('#form-password-unlocked').hide ();
-                $('#form-password-locked').show ();
-                inputPassword.val ('');
-                inputPassword.removeClass ('is-invalid');
-            }).fail (function (response) {
-                if (response.responseJSON.hasOwnProperty ('password')) {
-                    inputPassword.addClass ('is-invalid');
-                    inputPassword.parent ().find ('.invalid-feedback').html (response.responseJSON['password'][0]);
-                }
-            });
-        });
-
-        $('#btn-password-unlock').click (function () {
-            let inputPassword = $('.input-password');
-            inputPassword.removeClass ('is-invalid');
-            $('[data-toggle="tooltip"]').tooltip ('hide');
-            $.post ('{% url 'unlock' %}', {uri: uri}, function () {
-                $('#form-password-locked').hide ();
-                $('#form-password-unlocked').show ();
-                inputPassword.val ('');
-                inputPassword.removeClass ('is-invalid');
-            });
-        });
-
-        $('#form-uri').submit (function (e) {
-            let inputURI = $(e.target).find ('input');
-            e.preventDefault ();
-            $.post ('{% url 'rename' %}', {uri: uri, new_uri: inputURI.val ()}, function (data) {
-                location.replace ('/' + data.uri);
-            }).fail (function (response) {
-                if (response.responseJSON.hasOwnProperty ('new_uri')) {
-                    inputURI.addClass ('is-invalid');
-                    inputURI.parent ().find ('.invalid-feedback').html (response.responseJSON['new_uri']);
-                }
-            });
-        });
-
-        $('#btn-uri').magnificPopup ({
-            type: 'inline',
-            focus: '#password',
-            closeOnBgClick: false,
-        });
+    $(document).ready (() => {
+        $.ajaxSetup ({cache: true});
+        tooltips.tooltip ();
     });
     </script>
+
+    <script src="{% static 'js/ide.open.js' %}"></script>
+    <script src="{% static 'js/editor.open.js' %}"></script>
+    <script src="{% static 'js/code.open.js' %}"></script>
 </body>
 </html>

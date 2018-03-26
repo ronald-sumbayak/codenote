@@ -1,33 +1,103 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>codenote / {{ code.code }}</title>
+    <title>codenote | Upload</title>
+    <link rel="icon" href="{% static 'favicon.png' %}">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="google-site-verification" content="KuyZohRF9cc5EHQ07UJaK4_AE24-foc8Va-2mMpm8No" />
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'material-icons/material-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/upload.css' %}">
 </head>
-<body>
-    <div class="container-fluid" style="margin-top: 5vh; margin-bottom: 5vh">
+
+<body style="background: #eceff1">
+    <div class="container" style="padding-top: 5vh; padding-bottom: 5vh; height: 90vh">
         <div class="row">
             <div class="col-12">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="file" name="__upload__">
-                    <input type="submit" value="Submit">
-                </form>
+                <div class="card uploader" style="height: 90vh">
+                    <input
+                        type="file"
+                        class="uploader-file d-none"
+                        onchange="handleFiles(this.files)">
+                    <div class="card-body uploader-trigger d-flex flex-column">
+                        <div>
+                            <a
+                                href="{% url 'new' %}"
+                                class="btn btn-outline-secondary"
+                                data-toggle="tooltip"
+                                title="Back to Home"><i class="material-icons">home</i></a>
+                        </div>
+
+                        <div class="text-center m-auto">
+                            <div>
+                                <i class="uploader-hint uploader-icon material-icons md-144">file_download</i>
+                            </div>
+                            <div>
+                                <strong><span class="uploader-hint uploader-text">Drag your file here</span></strong>
+                            </div>
+                        </div>
+
+                        <div class="row uploader-control" style="display: none">
+                            <div class="col-xs-12 col-sm-auto">
+                                <form class="input-group uploader-form">
+                                    <input
+                                        type="text"
+                                        class="form-control uploader-uri uploader-control"
+                                        data-toggle="tooltip"
+                                        title="Specify URL"
+                                        placeholder="Custom URL"
+                                        style="line-height: 1.65">
+                                    <div class="invalid-feedback"></div>
+                                </form>
+                                <div class="d-sm-none" style="margin-bottom: 1rem"></div>
+                            </div>
+                            <div class="col-xs-12 col-sm-auto">
+                                <button
+                                    type="button"
+                                    class="btn btn-danger uploader-control"
+                                    data-toggle="tooltip"
+                                    title="Remove"
+                                    onclick="removeFile()"><i class="material-icons">close</i></button>
+                                <button
+                                    type="button"
+                                    class="btn btn-primary uploader-control float-sm-none float-right"
+                                    data-toggle="tooltip"
+                                    title="Upload!"
+                                    onclick="uploadFile()"><i class="material-icons">file_upload</i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <span style="color: #ccc">Status: </span><span class="uploader-hint uploader-status">Idle</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-    <!--script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script-->
-    <script src="https://use.fontawesome.com/c5a2cdae5e.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
+    <script src="{% static 'jquery/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'popperjs/popper.min.js' %}"></script>
+    <script src="{% static 'tooltipjs/tooltip.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <!--suppress JSUnusedLocalSymbols -->
+    <script>
+    let tooltips = $('[data-toggle="tooltip"]');
+    let endpoints = {
+        check: '{% url 'check' %}',
+        upload_api: '{% url 'upload-api' %}',
+    };
+
+    $(document).ready (() => {
+        tooltips.tooltip ();
+    })
+    </script>
+
+    <script src="{% static 'js/uploader.js' %}"></script>
 </body>
 </html>
