@@ -1,7 +1,7 @@
 from django.http.response import HttpResponseBase
 from django.shortcuts import render
 from django.views import View
-from rest_framework import serializers
+from rest_framework import serializers, exceptions
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -20,6 +20,7 @@ class Lazy (object):
     user = None
     data = {}
     response = None
+    methods = None
     
     def validate (self):
         """
@@ -34,10 +35,12 @@ class Lazy (object):
     
     def handler_not_provided (self):
         """
-        :return: response to be given when no handler provided (http request not supported)
+        :return: not method-specific method defined. Check for its method availability to decide
+                 whether it should call self.respond() method or not.
         :rtype: HttpResponseBase
         """
-        raise MethodNotAllowed (self.request.method)
+        if self.methods is None or self.methods != '__all__' and isinstance (self.methods, (list, tuple)) and self.request.method.lower () not in self.methods:
+            raise MethodNotAllowed (self.request.method)
     
     def respond (self):
         """
@@ -189,10 +192,10 @@ class LazyAPIView (Lazy, APIView):
     specified for the class, validate data, and pass the data validation as context data.
     """
     
-    # final serializer used to handle input data
+    # final input data
     __input = None
     
-    # final serializer used to handle output data.
+    # final output data.
     __output = None
     
     # serializer class specified to handle both input and output
@@ -211,6 +214,23 @@ class LazyAPIView (Lazy, APIView):
     @property
     def output (self):
         return self.__output
+    
+    def get_output (self):
+        """
+        input_serializer can set an attribute named validation_result to be treated as output
+        for this view and will be used as input for specified output_serializer.
+        
+        Method-specific handler can set the output to be processed automatically
+        by output_serializer, if specified, with self.output() method and will take
+        precedence over input_serializer.validation_result.
+        
+        :return: output to be returned as validation result
+        :rtype: Union[serializers.SerializerMetaClass, Any]
+        """
+        return self.output or self.input.validation_result
+    
+    def set_output (self, output):
+        self.__output = output
     
     @property
     def serializer_class (self):
@@ -231,7 +251,7 @@ class LazyAPIView (Lazy, APIView):
         """
         input = getattr (self.__class__, 'InputSerializer', self._serializer_class_in)
         if not (self.serializer_class or input):
-            raise LazyAPIView.SerializerNotSet ()
+            raise LazyAPIView.SerializerNotSet ('input')
         return self.serializer_class or input
     
     @property
@@ -245,26 +265,17 @@ class LazyAPIView (Lazy, APIView):
         """
         output = getattr (self.__class__, 'OutputSerializer', self._serializer_class_out)
         if not (self.serializer_class or output):
-            raise LazyAPIView.SerializerNotSet ()
+            raise LazyAPIView.SerializerNotSet ('output')
         return self.serializer_class or output
     
     def validate (self):
         """
         validate data using serializer returned by self.input_serializer
         """
-        input = self.input_serializer (data=self.request.data)
+        data = self.request.data or self.request.query_params or {}
+        input = self.input_serializer (data=data)
         input.is_valid (raise_exception=True)
         self.__input = input
-    
-    def get_output (self):
-        """
-        input serializer can set an attribute named validation_result to be treated as output
-        for this view and will be used when output serializer not specified.
-        
-        :return: output to be returned as validation result
-        :rtype: Union[serializers.SerializerMetaClass, Any]
-        """
-        return self.output or self.input.validation_result
     
     def respond (self):
         """
@@ -299,17 +310,17 @@ class LazyAPIView (Lazy, APIView):
         """
         override dispatch method of APIView with some tweak to match LazyView pattern.
         
-        :param request:
-        :type request:
+        :param request: request object
+        :type request: rest_framework.request.Request
         :return: response for request
         :rtype: HttpResponseBase
         """
         request = self.initialize_request (request, *args, **kwargs)
-        print (request.data)
         self.request = request
         self.args = args
         self.kwargs = kwargs
         self.headers = self.default_response_headers
+        print (request.data)
         
         if request.user.is_authenticated:
             ''' set self.user only if it is authenticated to avoid AnonymousUser '''
@@ -334,13 +345,21 @@ class LazyAPIView (Lazy, APIView):
         
         # exception details or info
         details = None
+        status = None
+        code = None
         
-        def __init__ (self, details):
+        def __init__ (self, details, status=None, code=None):
             """
             :param details: details of information to be displayed about this exception
             :type details: Union[str, tuple, list, dict]
+            :param status: HTTP status code
+            :type status: int
+            :param code: Error code to distinguish the problem/cause
+            :type code: str
             """
             self.details = details
+            self.status = status
+            self.code = code
         
         def handle (self, view):
             """
@@ -359,13 +378,16 @@ class LazyAPIView (Lazy, APIView):
                 detail = {self.details[0]: self.details[1]}
             else:
                 detail = {'details': self.details}
-            print (detail)
-            raise serializers.ValidationError (detail)
-            # raise serializers.ValidationError ({'details': self.details})
+            
+            if self.status == 404:
+                exc = exceptions.NotFound
+            else:
+                exc = exceptions.ValidationError
+            raise exc (detail, self.code)
     
     class SerializerNotSet (Error):
-        def __init__ (self):
-            super ().__init__ ('Serializer is not set')
+        def __init__ (self, type):
+            super ().__init__ ('Serializer (%s) is not set' % type)
 
 
 class URIView (LazyView):
