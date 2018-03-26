@@ -1,8 +1,24 @@
+import re
+
+from django.core.validators import RegexValidator
 from rest_framework import serializers
 
-from core.models import Code
-from core.views import LazyAPIView
-from . import models
+from .models import Code, Language, Reserved, Submission
+from .views import LazyAPIView
+
+
+class AlphaNumericField (serializers.CharField):
+    default_error_messages = {
+        'invalid':
+            'AlphaNumeric characters only.'
+    }
+    
+    def __init__ (self, **kwargs):
+        super ().__init__ (**kwargs)
+        self.validators.append (
+            RegexValidator (
+                re.compile (r'^[a-zA-Z0-9]+$'),
+                message = self.error_messages['invalid']))
 
 
 class ViewSerializer (serializers.Serializer):
@@ -23,19 +39,24 @@ class ViewSerializer (serializers.Serializer):
 
 
 class URISerializer (ViewSerializer):
-    uri = serializers.SlugField ()
+    uri = AlphaNumericField ()
     
-    def validate (self, attrs):
+    def validate_uri (self, value):
         try:
-            self.set_validation_result (Code.objects.get (uri=attrs.get ('uri')))
-            return attrs
+            self.set_validation_result (Code.objects.get (uri=value))
+            return value
         except Code.DoesNotExist:
-            raise LazyAPIView.Error ('Code Does Not Exists')
+            try:
+                Reserved.objects.get (word=value)
+                raise LazyAPIView.Error (
+                    ('uri', 'Sorry, this URL has been reserved for internal use (:'), 403)
+            except Reserved.DoesNotExist:
+                raise LazyAPIView.Error (('uri', 'Does not exists'), 404)
 
 
 class SubmissionSerializer (serializers.ModelSerializer):
     class Meta:
-        model = models.Submission
+        model = Submission
         fields = '__all__'
 
 
@@ -43,11 +64,13 @@ class CodeSerializer (serializers.ModelSerializer):
     password = serializers.CharField (write_only=True)
     
     class Meta:
-        model = models.Code
+        model = Code
         fields = '__all__'
 
 
-class CompilerSerializer (serializers.ModelSerializer):
+class LanguageSerializer (serializers.ModelSerializer):
     class Meta:
-        model = models.Compiler
+        model = Language
         fields = '__all__'
+
+
