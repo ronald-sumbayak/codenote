@@ -351,6 +351,7 @@ img.mfp-img {
     padding-right: 6px; } }
 
 .white-popup {
+  /* this style was added manually */
   position: relative;
   background: #FFF;
   padding: 25px;

@@ -10,11 +10,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="google-site-verification" content="KuyZohRF9cc5EHQ07UJaK4_AE24-foc8Va-2mMpm8No" />
 
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'magnific-popup/magnific-popup.css' %}">
-    <link rel="stylesheet" href="{% static 'codemirror/codemirror.css' %}">
-    <link rel="stylesheet" href="{% static 'material-icons/material-icons.css' %}">
-    <link rel="stylesheet" href="{% static 'css/open.css' %}">
+    <link rel="stylesheet" href="{% static 'twbs/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dimsemenov/magnific-popup/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'codemirror/CodeMirror/codemirror.css' %}">
+    <link rel="stylesheet" href="{% static 'google/material-design-icons/iconfont/material-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'codenote/css/open.css' %}">
 </head>
 
 <body style="background: #eceff1">
@@ -183,14 +183,13 @@
     let code;
     </script>
 
-    <script src="{% static 'jquery/jquery-3.3.1.js' %}"></script>
-    <script src="{% static 'popperjs/popper.min.js' %}"></script>
-    <script src="{% static 'tooltipjs/tooltip.min.js' %}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'clipboardjs/clipboard.js' %}"></script>
-    <script src="{% static 'magnific-popup/magnific-popup.js' %}"></script>
-    <script src="{% static 'codemirror/codemirror.js' %}"></script>
-    <script src="{% static 'codemirror/addon/selection/active-line.js' %}"></script>
+    <script src="{% static 'jquery/jquery/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'FezVrasta/popper.js/popper.min.js' %}"></script>
+    <script src="{% static 'FezVrasta/popper.js/tooltip.min.js' %}"></script>
+    <script src="{% static 'twbs/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'dimsemenov/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'codemirror/CodeMirror/codemirror.js' %}"></script>
+    <script src="{% static 'codemirror/CodeMirror/addon/selection/active-line.js' %}"></script>
     <script src="{% static 'google/diff-match-patch/javascript/diff_match_patch.js' %}"></script>
 
     <!--suppress JSUnusedLocalSymbols -->
@@ -199,7 +198,7 @@
     let endpoints = {
         code: '{% url 'code' %}',
         lock: '{% url 'lock' %}',
-        mode: '{% static 'codemirror/mode' %}',
+        mode: '{% static 'codemirror/CodeMirror/mode' %}',
         rename: '{% url 'rename' %}',
         unlock: '{% url 'unlock' %}',
         update: '{% url 'update' %}',
@@ -211,8 +210,8 @@
     });
     </script>
 
-    <script src="{% static 'js/ide.open.js' %}"></script>
-    <script src="{% static 'js/editor.open.js' %}"></script>
-    <script src="{% static 'js/code.open.js' %}"></script>
+    <script src="{% static 'codenote/js/ide.open.js' %}"></script>
+    <script src="{% static 'codenote/js/editor.open.js' %}"></script>
+    <script src="{% static 'codenote/js/code.open.js' %}"></script>
 </body>
 </html>
