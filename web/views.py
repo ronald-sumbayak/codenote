@@ -1,23 +1,7 @@
-import exrex
 from django.shortcuts import redirect
 
-from core.models import Code, Compiler
-from core.views import CodeView, LazyView, LazyRenderView
-
-
-def generate_random_uri ():
-    """
-    Generate random URI that has not been used.
-    
-    :return: uri
-    :rtype: str
-    """
-    while True:
-        uri = exrex.getone ('[0-9A-Za-z]{6}')
-        try:
-            Code.objects.get (uri=uri)
-        except Code.DoesNotExist:
-            return uri
+from core.models import Code, Language, generate_random_uri
+from core.views import CodeView, LazyRenderView, LazyView
 
 
 class New (LazyView):
@@ -26,7 +10,7 @@ class New (LazyView):
 
 
 class Upload (LazyRenderView):
-    pass
+    methods = ['get']
 
 
 class Open (CodeView, LazyRenderView):
@@ -34,4 +18,4 @@ class Open (CodeView, LazyRenderView):
         return Code.objects.create (owner=self.user, uri=self.uri)
     
     def get (self):
-        self.add_data ('compilers', Compiler.objects.filter (codemirror__isnull=False, mime__isnull=False))
+        self.add_data ('languages', Language.objects.filter (codemirror__isnull=False, mime__isnull=False))

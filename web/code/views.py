@@ -1,8 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
-from core.views import CodeView, LazyView
-from web.views import LazyRenderView
+from core.views import CodeView, LazyRenderView, LazyView
 
 
 class Highlight (CodeView, LazyRenderView):
