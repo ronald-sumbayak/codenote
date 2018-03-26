@@ -54,8 +54,8 @@ class Lazy (object):
         """
         entry point for every request.
         
-        :param request:
-        :type request:
+        :param request: request object
+        :type request: rest_framework.request.Request
         :return: response for request
         :rtype: HttpResponseBase
         """
