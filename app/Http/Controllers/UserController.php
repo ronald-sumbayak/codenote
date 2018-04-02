@@ -24,7 +24,8 @@ class UserController extends Controller {
         if (!User::where ('email', $request->email))
             return $this->simpleJson ($request->email . " does not exist in our database");
 
-        if (Auth::attempt (['email' => $request->email, 'password' => $request->password], true))
+        if (Auth::attempt (['email' => $request->email, 'password' => 
+$request->password]))
             return $this->simpleJson ('success');
         else
             return $this->simpleJson ("Password didn't match");
